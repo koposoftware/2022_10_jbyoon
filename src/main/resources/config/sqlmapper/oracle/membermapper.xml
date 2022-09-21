@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="member.dao.memberDAO">
+	<resultMap type="kr.ac.kopo.member.vo.MemberVO" id="memberMap">
+		<result column="ID" property="id"/>	
+		<result column="PW" property="pw"/>	
+		<result column="NAME" property="name"/>
+		<result column="EMAIL" property="email"/>	
+		<result column="ADDR" property="addr"/>	
+		<result column="PHONE" property="phone"/>	
+		<result column="JUMIN1" property="jumin1"/>
+		<result column="JUMIN2" property="jumin2"/>
+		<result column="REG_DT" property="regDt"/>
+		<result column="MINFO_CHK" property="minfoChk"/>
+		<result column="OPEN_CHK" property="openChk"/>
+		<result column="PAY_CHK" property="payChk"/>
+		<result column="TYPE" property="type"/>
+	</resultMap>
+	
+	<select id="selectUser" parameterType="memberVO" resultMap="memberMap">
+		SELECT * FROM MEMBER
+		WHERE ID=#{id} AND PW=#{pw}
+	</select>
+	
+	<!-- 계좌 개설 전 1단계 본인인증 -->
+	<select id="selectByName" parameterType="memberVO" resultMap="memberMap">
+		SELECT * FROM MEMBER
+		WHERE NAME=#{name} 
+		  AND PHONE=#{phone} 
+		  AND JUMIN1=#{jumin1}
+		  AND JUMIN2=#{jumin2}
+	</select>
+	
+	<insert id="registerUser" parameterType="memberVO">
+		INSERT INTO MEMBER(ID, PW, NAME, EMAIL, ADDR, PHONE, JUMIN1, JUMIN2)
+		VALUES (
+			#{id}
+			, #{pw}
+			, #{name}
+			, #{email}
+		    , #{addr}
+		    , #{phone}
+		    , #{jumin1}
+		    , #{jumin2}
+		);
+	</insert>
+
+	<!-- 계좌 개설 : 개인정보 제공 동의 시 수정 -->
+	<update id="updateMInfoChk" parameterType="String">
+		UPDATE MEMBER
+		   SET MINFO_CHK = 'Y'
+		 WHERE ID = #{id}
+	</update>
+	
+	<!-- 가계부 : 오픈뱅킹 동의 시 수정 -->
+	<update id="updateOpenChk" parameterType="String">
+		UPDATE MEMBER
+		   SET OPEN_CHK = 'Y'
+		 WHERE ID = #{id}
+	</update>
+</mapper>
+
+
+
+

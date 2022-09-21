@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="account.dao.HanaAccountDAO">
+	<resultMap type="hanaAcctVO" id="acctMap">
+		<result column="ACCT_NUM" property="acctNum"/>	
+		<result column="MEMBER_ID" property="memberId"/>	
+		<result column="BANK_CD" property="bankCd"/>
+		<result column="ALIAS" property="alias"/>	
+		<result column="ACCT_PW" property="acctPw"/>	
+		<result column="BALANCE" property="balance"/>	
+		<result column="CREATE_DT" property="createDt"/>
+		<result column="ACCT_BOOK_CHK" property="acctBookChk"/>
+		<result column="TYPE" property="type"/>
+		<result column="IMG_PATH" property="imgPath"/>
+	</resultMap>
+	
+	<!-- 하나은행 계좌 조회 -->
+	<select id="selectByID" parameterType="String" resultMap="acctMap">
+		SELECT *
+		  FROM BANK_ACCT
+		 WHERE MEMBER_ID = #{memberId}
+	</select>
+	
+	<!-- 새로운 하나은행 계좌 개설 -->
+	<insert id="insertNewAcct" parameterType="hanaAcctVO">
+		INSERT INTO BANK_ACCT (ACCT_NUM, MEMBER_ID, ALIAS, ACCT_PW)
+		VALUES ( #{acctNum}
+				,#{memberId}
+				,#{alias}
+		    	,#{acctPw} )
+	</insert>
+	
+	<!-- 하나은행 계좌 잔액 조회 -->
+	<select id="selectBalance" parameterType="String" resultType="String">
+		SELECT BALANCE
+		  FROM BANK_ACCT
+		 WHERE ACCT_NUM = #{acctNum}
+	</select>
+	
+	<!-- 하나은행 계좌 비밀번호 조회 -->
+	<select id="selectPW" parameterType="String" resultType="String">
+		SELECT ACCT_PW
+		  FROM BANK_ACCT
+		 WHERE ACCT_NUM = #{acctNum}
+	</select>
+	
+	<!-- 은행 이름 조회 -->
+	<select id="selectBankNm" parameterType="String" resultType="String">
+		SELECT NAME
+		  FROM CODE
+		 WHERE CODE = #{bankCd}
+	</select>
+	
+	
+</mapper>
