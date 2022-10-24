@@ -48,8 +48,7 @@
 [발표자료 <img src="title.png"/>](/2260341014_윤정빈_발표.pdf)<br>
 
 ## 2-6. 시연 동영상 
-<iframe width="789" height="382" src="https://www.youtube.com/embed/q7wxrqrYph4" title="[최종프로젝트] 간편결제 서비스에 특화된 자산관리 챌린지 플랫폼 (2260341014 윤정빈)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
+<iframe width="677" height="328" src="https://www.youtube.com/embed/FGU6QUA8-pc" title="[최종프로젝트] 간편결제 서비스에 특화된 자산관리 챌린지 플랫폼 (윤정빈)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 # 4. 프로젝트 상세
 
