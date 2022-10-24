@@ -48,8 +48,7 @@
 [발표자료 <img src="title.png"/>](/2260341014_윤정빈_발표.pdf)<br>
 
 ## 2-6. 시연 동영상 
-<iframe width="828" height="480" src="https://www.youtube.com/embed/kIhcEC27FOY" title="한국폴리텍대학 광명융합기술교육원 2260341011 서유경 - 최종 프로젝트 시연영상" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
+<iframe width="789" height="382" src="https://www.youtube.com/embed/q7wxrqrYph4" title="[최종프로젝트] 간편결제 서비스에 특화된 자산관리 챌린지 플랫폼 (2260341014 윤정빈)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 
 # 4. 프로젝트 상세
