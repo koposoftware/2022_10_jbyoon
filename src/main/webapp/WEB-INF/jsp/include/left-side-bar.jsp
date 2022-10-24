@@ -3,8 +3,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <script src="https://code.jquery.com/jquery-3.6.1.js"
-	integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI="
-	crossorigin="anonymous"></script>
+		integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI="
+		crossorigin="anonymous"></script>
 <script>
 $(document).ready(function(){
 	let id = '${loginVO.id}';
@@ -28,21 +28,16 @@ $(document).ready(function(){
 		})
 	});
 	
-	$('#loginBtn').click(function(){
-		location.href = '${pageContext.request.contextPath}/login';
-	});
 	
 });
-
 
 </script>
 <div class="left-side-bar">
 	<div class="brand-logo">
-		<a href="/"> <img
-			src="${pageContext.request.contextPath}/resources/vendors/images/deskapp-logo.svg"
-			alt="" class="dark-logo" /> <img
-			src="${pageContext.request.contextPath}/resources/vendors/images/deskapp-logo-white.svg"
-			alt="" class="light-logo" />
+		<a href="/main" title="메인화면으로 이동" style="color: black; text-align: center; "> 
+				<img
+					src="https://image.kebhana.com/cont/common/img/newmain2021/logo.png"
+					alt="하나은행 로고" class="dark-logo" style="margin: auto; display: block;"/>
 		</a>
 		<div class="close-sidebar" data-toggle="left-sidebar-close">
 			<i class="ion-close-round"></i>
@@ -162,7 +157,7 @@ $(document).ready(function(){
 							<c:when test="${loginVO ne null}">
 								<li><a href="${pageContext.request.contextPath}/acctbook">거래내역조회</a></li>
 								<c:choose>
-									<c:when test="${loginVO.openChk eq 'Y' }">
+									<c:when test="${loginVO.payChk eq 'Y' }">
 										<li><a href="${pageContext.request.contextPath}/cashbook">현금 거래내역조회</a></li>
 									</c:when>
 									<c:otherwise>
@@ -170,10 +165,12 @@ $(document).ready(function(){
 											data-target="#confirmCalendar-modal">현금 거래내역조회</a></li>
 									</c:otherwise>
 								</c:choose>
+								<li><a href="${pageContext.request.contextPath}/analysis">분석</a></li>
 							</c:when>
 							<c:otherwise>
-								<li><a href="${pageContext.request.contextPath}/login" >거래내역조회</a></li>
-								<li><a href="${pageContext.request.contextPath}/login" >현금 거래내역조회</a></li>
+								<li><a href="${pageContext.request.contextPath}/login">거래내역조회</a></li>
+								<li><a href="${pageContext.request.contextPath}/login">현금 거래내역조회</a></li>
+								<li><a href="${pageContext.request.contextPath}/login">분석</a></li>
 							</c:otherwise>
 						</c:choose>
 					</ul>
@@ -262,7 +259,7 @@ $(document).ready(function(){
 				<h4 class="padding-top-30 mb-30 weight-500">
 					💡 오픈뱅킹 서비스 이용 동의
 				</h4>
-				다른 은행 계좌 정보를 불러오기 전에 오픈뱅킹 서비스 이용<br>
+				다른 은행 계좌 정보를 불러오기 전에 최초 1회 오픈뱅킹 서비스 이용<br>
 				동의가 필요합니다. 진행하시겠습니까?<br>
 				<div class="padding-bottom-30 row"
 					style="max-width: 170px; margin: 0 auto;">
@@ -296,11 +293,17 @@ $(document).ready(function(){
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-body text-center font-18">
-				<h4 class="padding-top-30 mb-30 weight-500">
-					💡 간편결제 및 오픈뱅킹 정보제공 동의
+				<h4 class="padding-top-30 mb-30 weight-500" >
+					💡 간편결제 정보 이용 동의
 				</h4>
-				가계부가계부가계부가계부가계부가계부가계부<br>
-				가계부가계부가계부가계부가계부가계부가계부<br>
+				<h6 style="font-style: normal;">
+					현금 거래내역 조회 서비스는 원큐페이, 카카오페이<br>
+					간편결제 시스템을 사용하는 하나은행 회원들을 대상으로<br>
+					페이머니 거래내역 정보를 수집합니다.<br><br>
+					또한, 현장에서 사용한 종이 현금 거래에 대한 정보를<br>
+					직접 기입하여 보다 꼼꼼하고 편리한 서비스를 제공하도록 합니다.<br> 
+				</h6>
+				<br>
 				<div class="padding-bottom-30 row"
 					style="max-width: 170px; margin: 0 auto;">
 					<div class="col-6">

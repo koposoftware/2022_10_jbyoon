@@ -10,26 +10,12 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 		<!-- Basic Page Info -->
 		<meta charset="utf-8" />
-		<title>DeskApp - Bootstrap Admin Dashboard HTML Template</title>
+		<title>하나계좌개설</title>
 
 		<!-- Site favicon -->
-		<link
-			rel="apple-touch-icon"
-			sizes="180x180"
-			href="${pageContext.request.contextPath}/resources/vendors/images/apple-touch-icon.png"
-		/>
-		<link
-			rel="icon"
-			type="image/png"
-			sizes="32x32"
-			href="${pageContext.request.contextPath}/resources/vendors/images/favicon-32x32.png"
-		/>
-		<link
-			rel="icon"
-			type="image/png"
-			sizes="16x16"
-			href="${pageContext.request.contextPath}/resources/vendors/images/favicon-16x16.png"
-		/>
+<link rel="icon" type="image/png"
+	href="${pageContext.request.contextPath}/resources/vendors/images/bank/hana_logo.png">
+
 
 		<!-- Mobile Specific Metas -->
 		<meta
@@ -57,31 +43,16 @@
 		<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/vendors/styles/style.css" />
 		<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/vendors/styles/license.css" />
 
-		<!-- Global site tag (gtag.js) - Google Analytics -->
-		<script async src="https://www.googletagmanager.com/gtag/js?id=G-GBZ3SGGX85"></script>
-		<script>
-			window.dataLayer = window.dataLayer || [];
-			function gtag() {
-				dataLayer.push(arguments);
-			}
-			gtag("js", new Date());
-
-			gtag("config", "G-GBZ3SGGX85");
-		</script>
-		<!-- Google Tag Manager -->
-		<script>
-			(function (w, d, s, l, i) {
-				w[l] = w[l] || [];
-				w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
-				var f = d.getElementsByTagName(s)[0],
-					j = d.createElement(s),
-					dl = l != "dataLayer" ? "&l=" + l : "";
-				j.async = true;
-				j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
-				f.parentNode.insertBefore(j, f);
-			})(window, document, "script", "dataLayer", "GTM-NXZMQSS");
-		</script>
-		<!-- End Google Tag Manager -->
+		<!-- header를 위한 CSS -->
+		<!-- Bootstrap -->
+		<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/mainview/plugins/bootstrap/bootstrap.min.css">
+		<!-- FontAwesome -->
+		<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/mainview/plugins/fontawesome/css/all.min.css">
+		<!-- Animation -->
+		<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/mainview/plugins/animate-css/animate.css">
+		<!-- Template styles-->
+		<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/mainview/css/style.css">
+		
 		
 		<!-- 1. Next 버튼 클릭 시 사용자가 입력한 정보의 유효성 검사 -->
 		<script type="text/javascript">
@@ -190,7 +161,9 @@
 						},
 						dataType: "text",
 						success: function(result){
-							alert(result);
+							if(result === 'success'){
+								alert('동의 처리가 완료되었습니다.');
+							}
 						},
 						error: function(){
 							alert('error!');
@@ -385,418 +358,23 @@
         <!-- End of Drag&Drop -->
 	</head>
 	<body>
-		<div class="header">
-			<div class="header-left">
-				<div class="menu-icon bi bi-list"></div>
-				<div
-					class="search-toggle-icon bi bi-search"
-					data-toggle="header_search">
-				</div>
-				<div class="header-search">
-					<form>
-						<div class="form-group mb-0">
-							<i class="dw dw-search2 search-icon"></i>
-							<input
-								type="text"
-								class="form-control search-input"
-								placeholder="Search Here"
-							/>
-							<div class="dropdown">
-								<a
-									class="dropdown-toggle no-arrow"
-									href="#"
-									role="button"
-									data-toggle="dropdown"
-								>
-									<i class="ion-arrow-down-c"></i>
-								</a>
-								<div class="dropdown-menu dropdown-menu-right">
-									<div class="form-group row">
-										<label class="col-sm-12 col-md-2 col-form-label"
-											>From</label
-										>
-										<div class="col-sm-12 col-md-10">
-											<input
-												class="form-control form-control-sm form-control-line"
-												type="text"
-											/>
-										</div>
-									</div>
-									<div class="form-group row">
-										<label class="col-sm-12 col-md-2 col-form-label">To</label>
-										<div class="col-sm-12 col-md-10">
-											<input
-												class="form-control form-control-sm form-control-line"
-												type="text"
-											/>
-										</div>
-									</div>
-									<div class="form-group row">
-										<label class="col-sm-12 col-md-2 col-form-label"
-											>Subject</label
-										>
-										<div class="col-sm-12 col-md-10">
-											<input
-												class="form-control form-control-sm form-control-line"
-												type="text"
-											/>
-										</div>
-									</div>
-									<div class="text-right">
-										<button class="btn btn-primary">Search</button>
-									</div>
-								</div>
-							</div>
-						</div>
-					</form>
-				</div>
-			</div>
-			<div class="header-right">
-				<div class="dashboard-setting user-notification">
-					<div class="dropdown">
-						<a	class="dropdown-toggle no-arrow"
-							href="javascript:;"
-							data-toggle="right-sidebar">
-							<i class="dw dw-settings2"></i>
-						</a>
-					</div>
-				</div>
-				<div class="user-notification">
-					<div class="dropdown">
-						<a
-							class="dropdown-toggle no-arrow"
-							href="#"
-							role="button"
-							data-toggle="dropdown">
-							<i class="icon-copy dw dw-notification"></i>
-							<span class="badge notification-active"></span>
-						</a>
-						<div class="dropdown-menu dropdown-menu-right">
-							<div class="notification-list mx-h-350 customscroll">
-								<ul>
-									<li>
-										<a href="#">
-											<img src="${pageContext.request.contextPath}/resources/vendors/images/img.jpg" alt="" />
-											<h3>John Doe</h3>
-											<p>
-												Lorem ipsum dolor sit amet, consectetur adipisicing
-												elit, sed...
-											</p>
-										</a>
-									</li>
-									<li>
-										<a href="#">
-											<img src="${pageContext.request.contextPath}/resources/vendors/images/photo1.jpg" alt="" />
-											<h3>Lea R. Frith</h3>
-											<p>
-												Lorem ipsum dolor sit amet, consectetur adipisicing
-												elit, sed...
-											</p>
-										</a>
-									</li>
-									<li>
-										<a href="#">
-											<img src="${pageContext.request.contextPath}/resources/vendors/images/photo2.jpg" alt="" />
-											<h3>Erik L. Richards</h3>
-											<p>
-												Lorem ipsum dolor sit amet, consectetur adipisicing
-												elit, sed...
-											</p>
-										</a>
-									</li>
-									<li>
-										<a href="#">
-											<img src="${pageContext.request.contextPath}/resources/vendors/images/photo3.jpg" alt="" />
-											<h3>John Doe</h3>
-											<p>
-												Lorem ipsum dolor sit amet, consectetur adipisicing
-												elit, sed...
-											</p>
-										</a>
-									</li>
-									<li>
-										<a href="#">
-											<img src="${pageContext.request.contextPath}/resources/vendors/images/photo4.jpg" alt="" />
-											<h3>Renee I. Hansen</h3>
-											<p>
-												Lorem ipsum dolor sit amet, consectetur adipisicing
-												elit, sed...
-											</p>
-										</a>
-									</li>
-									<li>
-										<a href="#">
-											<img src="${pageContext.request.contextPath}/resources/vendors/images/img.jpg" alt="" />
-											<h3>Vicki M. Coleman</h3>
-											<p>
-												Lorem ipsum dolor sit amet, consectetur adipisicing
-												elit, sed...
-											</p>
-										</a>
-									</li>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="user-info-dropdown">
-					<div class="dropdown">
-						<a
-							class="dropdown-toggle"
-							href="#"
-							role="button"
-							data-toggle="dropdown"
-						>
-							<span class="user-icon">
-								<img src="${pageContext.request.contextPath}/resources/vendors/images/photo1.jpg" alt="" />
-							</span>
-							<span class="user-name">Ross C. Lopez</span>
-						</a>
-						<div
-							class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list"
-						>
-							<a class="dropdown-item" href="profile.html"
-								><i class="dw dw-user1"></i> Profile</a
-							>
-							<a class="dropdown-item" href="profile.html"
-								><i class="dw dw-settings2"></i> Setting</a
-							>
-							<a class="dropdown-item" href="faq.html"
-								><i class="dw dw-help"></i> Help</a
-							>
-							<a class="dropdown-item" href="login.html"
-								><i class="dw dw-logout"></i> Log Out</a
-							>
-						</div>
-					</div>
-				</div>
-				<div class="github-link">
-					<a href="https://github.com/dropways/deskapp" target="_blank"
-						><img src="${pageContext.request.contextPath}/resources/vendors/images/github.svg" alt=""
-					/></a>
-				</div>
-			</div>
-		</div>
-
-		<div class="right-sidebar">
-			<div class="sidebar-title">
-				<h3 class="weight-600 font-16 text-blue">
-					Layout Settings
-					<span class="btn-block font-weight-400 font-12"
-						>User Interface Settings</span
-					>
-				</h3>
-				<div class="close-sidebar" data-toggle="right-sidebar-close">
-					<i class="icon-copy ion-close-round"></i>
-				</div>
-			</div>
-			<div class="right-sidebar-body customscroll">
-				<div class="right-sidebar-body-content">
-					<h4 class="weight-600 font-18 pb-10">Header Background</h4>
-					<div class="sidebar-btn-group pb-30 mb-10">
-						<a
-							href="javascript:void(0);"
-							class="btn btn-outline-primary header-white active"
-							>White</a
-						>
-						<a
-							href="javascript:void(0);"
-							class="btn btn-outline-primary header-dark"
-							>Dark</a
-						>
-					</div>
-
-					<h4 class="weight-600 font-18 pb-10">Sidebar Background</h4>
-					<div class="sidebar-btn-group pb-30 mb-10">
-						<a
-							href="javascript:void(0);"
-							class="btn btn-outline-primary sidebar-light"
-							>White</a
-						>
-						<a
-							href="javascript:void(0);"
-							class="btn btn-outline-primary sidebar-dark active"
-							>Dark</a
-						>
-					</div>
-
-					<h4 class="weight-600 font-18 pb-10">Menu Dropdown Icon</h4>
-					<div class="sidebar-radio-group pb-10 mb-10">
-						<div class="custom-control custom-radio custom-control-inline">
-							<input
-								type="radio"
-								id="sidebaricon-1"
-								name="menu-dropdown-icon"
-								class="custom-control-input"
-								value="icon-style-1"
-								checked=""
-							/>
-							<label class="custom-control-label" for="sidebaricon-1"
-								><i class="fa fa-angle-down"></i
-							></label>
-						</div>
-						<div class="custom-control custom-radio custom-control-inline">
-							<input
-								type="radio"
-								id="sidebaricon-2"
-								name="menu-dropdown-icon"
-								class="custom-control-input"
-								value="icon-style-2"
-							/>
-							<label class="custom-control-label" for="sidebaricon-2"
-								><i class="ion-plus-round"></i
-							></label>
-						</div>
-						<div class="custom-control custom-radio custom-control-inline">
-							<input
-								type="radio"
-								id="sidebaricon-3"
-								name="menu-dropdown-icon"
-								class="custom-control-input"
-								value="icon-style-3"
-							/>
-							<label class="custom-control-label" for="sidebaricon-3"
-								><i class="fa fa-angle-double-right"></i
-							></label>
-						</div>
-					</div>
-
-					<h4 class="weight-600 font-18 pb-10">Menu List Icon</h4>
-					<div class="sidebar-radio-group pb-30 mb-10">
-						<div class="custom-control custom-radio custom-control-inline">
-							<input
-								type="radio"
-								id="sidebariconlist-1"
-								name="menu-list-icon"
-								class="custom-control-input"
-								value="icon-list-style-1"
-								checked=""
-							/>
-							<label class="custom-control-label" for="sidebariconlist-1"
-								><i class="ion-minus-round"></i
-							></label>
-						</div>
-						<div class="custom-control custom-radio custom-control-inline">
-							<input
-								type="radio"
-								id="sidebariconlist-2"
-								name="menu-list-icon"
-								class="custom-control-input"
-								value="icon-list-style-2"
-							/>
-							<label class="custom-control-label" for="sidebariconlist-2"
-								><i class="fa fa-circle-o" aria-hidden="true"></i
-							></label>
-						</div>
-						<div class="custom-control custom-radio custom-control-inline">
-							<input
-								type="radio"
-								id="sidebariconlist-3"
-								name="menu-list-icon"
-								class="custom-control-input"
-								value="icon-list-style-3"
-							/>
-							<label class="custom-control-label" for="sidebariconlist-3"
-								><i class="dw dw-check"></i
-							></label>
-						</div>
-						<div class="custom-control custom-radio custom-control-inline">
-							<input
-								type="radio"
-								id="sidebariconlist-4"
-								name="menu-list-icon"
-								class="custom-control-input"
-								value="icon-list-style-4"
-								checked=""
-							/>
-							<label class="custom-control-label" for="sidebariconlist-4"
-								><i class="icon-copy dw dw-next-2"></i
-							></label>
-						</div>
-						<div class="custom-control custom-radio custom-control-inline">
-							<input
-								type="radio"
-								id="sidebariconlist-5"
-								name="menu-list-icon"
-								class="custom-control-input"
-								value="icon-list-style-5"
-							/>
-							<label class="custom-control-label" for="sidebariconlist-5"
-								><i class="dw dw-fast-forward-1"></i
-							></label>
-						</div>
-						<div class="custom-control custom-radio custom-control-inline">
-							<input
-								type="radio"
-								id="sidebariconlist-6"
-								name="menu-list-icon"
-								class="custom-control-input"
-								value="icon-list-style-6"
-							/>
-							<label class="custom-control-label" for="sidebariconlist-6"
-								><i class="dw dw-next"></i
-							></label>
-						</div>
-					</div>
-
-					<div class="reset-options pt-30 text-center">
-						<button class="btn btn-danger" id="reset-settings">
-							Reset Settings
-						</button>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<!-- LEFT-SIDE-BAR -->
-		<jsp:include page="/WEB-INF/jsp/include/left-side-bar.jsp"></jsp:include>
+		<!-- header-->
+		<jsp:include page="/WEB-INF/jsp/include/header.jsp">
+			<jsp:param value="${dday}" name="dday"/>
+		</jsp:include>
 		
 		<div class="mobile-menu-overlay"></div>
 
-		<div class="main-container">
+		<div class="main-container" style="padding-right: 300px;">
 			<div class="pd-ltr-20 xs-pd-20-10">
 				<div class="min-height-200px">
-					<div class="page-header">
-						<div class="row">
-							<div class="col-md-6 col-sm-12">
-								<div class="title">
-									<h4>계좌 개설하기 위한 절차입니다.</h4>
-								</div>
-								<nav aria-label="breadcrumb" role="navigation">
-									<ol class="breadcrumb">
-										<li class="breadcrumb-item">
-											<a href="index.html">Home</a>
-										</li>
-										<li class="breadcrumb-item active" aria-current="page">
-											Form Wizards
-										</li>
-									</ol>
-								</nav>
-							</div>
-							<div class="col-md-6 col-sm-12 text-right">
-								<div class="dropdown">
-									<a
-										class="btn btn-primary dropdown-toggle"
-										href="#"
-										role="button"
-										data-toggle="dropdown"
-									>
-										January 2018
-									</a>
-									<div class="dropdown-menu dropdown-menu-right">
-										<a class="dropdown-item" href="#">Export List</a>
-										<a class="dropdown-item" href="#">Policies</a>
-										<a class="dropdown-item" href="#">View Assets</a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+					<br>
+					<br>
 
-					<div class="pd-20 card-box mb-30">
+					<div class="pd-30 card-box mb-30">
 						<div class="clearfix">
-							<h4 class="text-blue h4">비대면 계좌 개설</h4>
-							<p class="mb-30">jQuery Step wizard</p>
+							<h4 class="text-black h4">비대면 계좌 개설</h4>
+							<p class="mb-30">계좌 개설을 위해 아래의 4단계 인증 절차를 진행해주십시오.</p>
 						</div>
 						<div class="wizard-content">
 							<form:form class="tab-wizard wizard-circle wizard" 
@@ -805,44 +383,52 @@
 								
 								<!-- step 1 -->
 								<h5>개인정보 입력</h5>
-								<section>
-									<div class="row justify-content-md-center">
-										<div class="col-md-2">
-											<label style="float:right; text-align: center;">성함 :</label>
-										</div>
-										<div class="col-md-4">
-											<div class="form-group" >
-												<input type="text" class="form-control" name="name" id="name" />
-											</div>
+							<br>
+							<br>
+							<section>
+								<div class="row justify-content-md-center">
+									<div class="col-2"></div>
+									<div class="col-2">
+										<label style="float: right; text-align: center;">성함 :</label>
+									</div>
+									<div class="col-4">
+										<div class="form-group">
+											<input type="text" class="form-control" name="name" id="name" />
 										</div>
 									</div>
-									
-									<div class="row justify-content-md-center">
-										<div class="col-md-2">
-											<label style="float:right; text-align: center;">연락처 :</label>
-										</div>
-										<div class="col-md-4">
-											<div class="form-group">
-												<input type="text" class="form-control" placeholder="- 없이 입력하세요"
-														name="phone" id="phone" />
-											</div>
-										</div>
-									</div>
-									
-									<div class="row justify-content-md-center">
-										<div class="col-md-2">
-											<label style="float:right; text-align: center;">주민등록번호 :</label>
-										</div>
-										<div class="col-md-4">
-											<div class="form-group">
-												<input type="text" class="form-control" name="jumin" id="jumin" />
-											</div>
-										</div>
-									</div>
-									
-								</section>
+									<div class="col-4"></div>
+								</div>
 								
-								<!-- Step 2 -->
+								<div class="row justify-content-md-center">
+									<div class="col-2"></div>
+									<div class="col-2">
+										<label style="float: right; text-align: center;">연락처 :</label>
+									</div>
+									<div class="col-4">
+										<div class="form-group">
+											<input type="text" class="form-control" placeholder="- 없이 입력하세요" name="phone" id="phone" />
+										</div>
+									</div>
+									<div class="col-4"></div>
+								</div>
+								
+								<div class="row justify-content-md-center">
+									<div class="col-2"></div>
+									<div class="col-2">
+										<label style="float: right; text-align: center;">주민등록번호 :</label>
+									</div>
+									<div class="col-4">
+										<div class="form-group">
+											<input type="text" class="form-control" name="jumin" id="jumin" />
+										</div>
+									</div>
+									<div class="col-4"></div>
+								</div>
+								
+
+							</section>
+
+							<!-- Step 2 -->
 								<h5>개인정보 약관 동의</h5>
 								<section>
 									<div class="row">
@@ -899,82 +485,79 @@
 								
 								<!-- Step 3 -->
 								<h5>신분증 확인</h5>
-								<section>
-									<div class="row justify-content-md-center">
-										<div class="row justify-content-md-center" style="margin: 0;">
-											<div id="fileUpload" class="dragAndDropDiv" style="display: inline-block;">Drag & Drop
-												Files Here or Browse Files</div>
-											<br> <input type="file" name="fileUpload" id="fileUpload"
-												style="display: none;" required=true value="업로드" multiple
-												onchange="setThumbnail(event);" /> <br>
-		
-											<div id="image_container"
-												style="padding: 100px; margin: 0 auto;"></div>
-		
-											<!-- 									<div id="imgPre" style="border:solid 1px">
-													<img id="preview" class="preview" style="width:400px;height:400px;"> 
-												</div> -->
-	
+
+							<section>
+
+								<div class="row justify-content-md-center" style="margin: 0;">
+									<div id="fileUpload" class="dragAndDropDiv"
+										style="display: inline-block;">Drag & Drop Files Here or
+										Browse Files</div>
+									<br> <input type="file" name="fileUpload" id="fileUpload"
+										style="display: none;" required=true value="업로드" multiple
+										onchange="setThumbnail(event);" /> <br>
+
+									<!-- 									<div id="imgPre" style="border:solid 1px">
+														<img id="preview" class="preview" style="width:400px;height:400px;"> 
+													</div> -->
+
+								</div>
+								<div class="row justify-content-md-center" style="margin: 0;">
+									<div id="image_container"
+										style="padding: 100px; margin: 0 auto;"></div>
+
+								</div>
+								<br>
+								<br>
+								<div class="row justify-content-md-center">
+									<div class="col-2"></div>
+									<div class="col-2">
+										<label style="float: right; text-align: center;">성함 :</label>
+									</div>
+									<div class="col-4">
+										<div class="form-group">
+											<input type="text" class="form-control" name="name2"
+												id="name2" />
 										</div>
 									</div>
-									
-	
-									<div class="row justify-content-md-center">
-										<div class="col-md-2">
-											<label style="float: right; text-align: center;">성함 :</label>
-										</div>
-										<div class="col-md-4">
-											<div class="form-group">
-												<input type="text" class="form-control" name="name2"
-													id="name2" />
-											</div>
+									<div class="col-4"></div>
+								</div>
+
+								<div class="row justify-content-md-center">
+									<div class="col-2"></div>
+									<div class="col-2">
+										<label style="float: right; text-align: center;">주민등록번호
+											:</label>
+									</div>
+									<div class="col-4">
+										<div class="form-group">
+											<input type="text" class="form-control" name="jumin"
+												id="jumin" />
 										</div>
 									</div>
-	
-									<div class="row justify-content-md-center">
-										<div class="col-md-2">
-											<label style="float: right; text-align: center;">주민등록번호
-												:</label>
-										</div>
-										<div class="col-md-4">
-											<div class="form-group">
-												<input type="text" class="form-control"
-													placeholder="앞 6자리" name="jumin1" id="jumin1" />
-											</div>
-										</div>
-										<div class="col-md-4">
-											<div class="form-group">
-												<input type="text" class="form-control"
-													placeholder="뒤 7자리" name="jumin2" id="jumin2" />
-											</div>
+									<div class="col-4"></div>
+								</div>
+
+
+								<div class="row justify-content-md-center">
+									<div class="col-2"></div>
+									<div class="col-2">
+										<label style="float: right; text-align: center;">발급일 :</label>
+									</div>
+									<div class="col-4">
+										<div class="form-group">
+											<input type="text" class="form-control" name="licenseDt"
+												id="licenseDt" />
 										</div>
 									</div>
-	
-									<div class="row justify-content-md-center">
-										<div class="col-md-2">
-											<label style="float: right; text-align: center;">발급일 :</label>
-										</div>
-										<div class="col-md-4">
-											<div class="form-group">
-												<input type="text" class="form-control" name="licenseDt"
-													id="licenseDt" />
-											</div>
-										</div>
-									</div>
-	
-									<!-- 서버로 보낼 부분 작성 
-											url : /extractText 로 전송해서 VisionController.java에서 처리
-											$('#licenseAuthBtn').click(function(){});  
-											
-										<button id="licenseAuthBtn">인증</button>
-										-->
-	
-								</section>
-	
-								<!-- Step 4 -->
+									<div class="col-4"></div>
+								</div>
+
+							</section>
+
+							<!-- Step 4 -->
 								<h5>계좌 개설</h5>
 								<section>
-									<div class="row">
+									<div class="row justify-content-md-center">
 										<div class="col-md-6">
 											<div class="form-group">
 												<label>은행명</label>
@@ -1062,16 +645,7 @@
 		<script src="${pageContext.request.contextPath}/resources/vendors/scripts/layout-settings.js"></script>
 		<script src="${pageContext.request.contextPath}/resources/src/plugins/jquery-steps/jquery.steps.js"></script>
 		<script src="${pageContext.request.contextPath}/resources/vendors/scripts/steps-setting.js"></script>
-		<!-- Google Tag Manager (noscript) -->
-		<noscript
-			><iframe
-				src="https://www.googletagmanager.com/ns.html?id=GTM-NXZMQSS"
-				height="0"
-				width="0"
-				style="display: none; visibility: hidden"
-			></iframe
-		></noscript>
-		<!-- End Google Tag Manager (noscript) -->
+		
 	</body>
 </html>
     

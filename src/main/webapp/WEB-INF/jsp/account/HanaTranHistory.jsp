@@ -32,36 +32,16 @@
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/resources/vendors/styles/style.css" />
 
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async
-	src="https://www.googletagmanager.com/gtag/js?id=G-GBZ3SGGX85"></script>
-<script src="https://code.jquery.com/jquery-3.6.1.js"
-	integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI="
-	crossorigin="anonymous"></script>
-
-<script>
-			window.dataLayer = window.dataLayer || [];
-			function gtag() {
-				dataLayer.push(arguments);
-			}
-			gtag("js", new Date());
-
-			gtag("config", "G-GBZ3SGGX85");
-		</script>
-<!-- Google Tag Manager -->
-<script>
-			(function (w, d, s, l, i) {
-				w[l] = w[l] || [];
-				w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
-				var f = d.getElementsByTagName(s)[0],
-					j = d.createElement(s),
-					dl = l != "dataLayer" ? "&l=" + l : "";
-				j.async = true;
-				j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
-				f.parentNode.insertBefore(j, f);
-			})(window, document, "script", "dataLayer", "GTM-NXZMQSS");
-		</script>
-<!-- End Google Tag Manager -->
+		<!-- header를 위한 CSS -->
+		<!-- Bootstrap -->
+		<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/mainview/plugins/bootstrap/bootstrap.min.css">
+		<!-- FontAwesome -->
+		<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/mainview/plugins/fontawesome/css/all.min.css">
+		<!-- Animation -->
+		<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/mainview/plugins/animate-css/animate.css">
+		<!-- Template styles-->
+		<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/mainview/css/style.css">
+		
 
 <script>
 	$(document).ready(function(){
@@ -93,9 +73,9 @@
 				data:data
 			})
 			.done(function(data){ 
-				alert('fdsfds');
+				//alert('fdsfds');
 				var list = JSON.parse(data); // data 객체화 (배열처리)
-				console.log(list);
+				// console.log(list);
 				
 				var html = '';
 				
@@ -129,15 +109,18 @@
 
 </head>
 <body>
-	<jsp:include page="/WEB-INF/jsp/include/header.jsp" />
-	<jsp:include page="/WEB-INF/jsp/include/right-sidebar.jsp" />
-	<jsp:include page="/WEB-INF/jsp/include/left-side-bar.jsp" />
+	
+	<!-- header-->
+	<jsp:include page="/WEB-INF/jsp/include/header.jsp">
+		<jsp:param value="${dday}" name="dday"/>
+	</jsp:include>
 
 	<div class="mobile-menu-overlay"></div>
 
-	<div class="main-container">
+	<div class="main-container" style="padding-right: 300px;">
 		<div class="pd-ltr-20 xs-pd-20-10">
 			<div class="min-height-200px">
+			<br><br>
 				<div class="page-header">
 					<div class="row">
 						<div class="col-md-6 col-sm-12">

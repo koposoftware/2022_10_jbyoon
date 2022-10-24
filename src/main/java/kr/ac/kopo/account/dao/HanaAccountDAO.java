@@ -23,9 +23,9 @@ public class HanaAccountDAO implements AccountDAO {
 	}
 	
 	@Override
-	public List<HanaAccountVO> selectAll(String id) {
+	public List<HanaAccountVO> selectAcctList(String id) {
 		List<HanaAccountVO> list = sst.selectList("account.dao.HanaAccountDAO.selectByID", id);
-		System.out.println("하나은행 계좌들 전체조회");
+		System.out.println("하나은행 거래선택 전체조회");
 		
 		for(int i = 0; i < list.size(); i++) {
 			String won = moneyFormat(list.get(i).getBalance());

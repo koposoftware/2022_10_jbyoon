@@ -1,0 +1,50 @@
+[
+  {
+    "acctNum": "2260-34-101400",
+    "memberId": "f",
+    "bankCd": "81",
+    "alias": "우리통장",
+    "acctPw": "1234",
+    "balance": "823500",
+    "createDt": "2018.09.24 11:57:28",
+    "acctBookChk": "N",
+    "type": "오픈",
+    "imgPath": "card81.png"
+  },
+  {
+    "acctNum": "592202-10-101400",
+    "memberId": "f",
+    "bankCd": "82",
+    "alias": "국민통장",
+    "acctPw": "1234",
+    "balance": "500000",
+    "createDt": "2020.03.10 15:07:42",
+    "acctBookChk": "N",
+    "type": "오픈",
+    "imgPath": "card82.png"
+  },
+  {
+    "acctNum": "110-2977-101126",
+    "memberId": "f",
+    "bankCd": "83",
+    "alias": "신한통장",
+    "acctPw": "1234",
+    "balance": "117000",
+    "createDt": "2019.01.27 10:37:11",
+    "acctBookChk": "N",
+    "type": "오픈",
+    "imgPath": "card83.png"
+  },
+  {
+    "acctNum": "1504-123-1100",
+    "memberId": "f",
+    "bankCd": "88",
+    "alias": "카카오통장",
+    "acctPw": "1234",
+    "balance": "33300",
+    "createDt": "2021.02.21 11:02:10",
+    "acctBookChk": "N",
+    "type": "오픈",
+    "imgPath": "card88.png"
+  }
+]

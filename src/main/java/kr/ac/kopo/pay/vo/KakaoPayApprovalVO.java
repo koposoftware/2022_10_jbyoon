@@ -1,10 +1,12 @@
 package kr.ac.kopo.pay.vo;
 
-import java.util.Date;
-
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class KakaoPayApprovalVO {
 
     //response
@@ -14,5 +16,7 @@ public class KakaoPayApprovalVO {
     private CardVO card_info;
     private String item_name, item_code, payload;
     private Integer quantity, tax_free_amount, vat_amount;
-    private Date created_at, approved_at;
+    private String created_at, approved_at;
+    
+    private Integer total, tax_free, vat, point;
 }

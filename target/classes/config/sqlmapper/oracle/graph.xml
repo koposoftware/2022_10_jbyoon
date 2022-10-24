@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="analysis.graph">
+
+	<!-- 하나은행 계좌 조회 -->
+	<select id="weeklyExpense" resultType="java.util.HashMap">
+		SELECT TO_CHAR(DT, 'MM') MONTH, TO_CHAR(DT, 'w') WEEK, SUM(AMOUNT) AMOUNT
+		FROM (
+		    SELECT TO_DATE(SUBSTR(TRAN_DT, 0, 10), 'YYYY.MM.DD') DT, AB.AMOUNT
+		      FROM TRAN_HISTORY T
+		     INNER JOIN ACCOUNTBOOK AB ON T.ACCOUNTBOOK_NO = AB.NO
+		     WHERE TRAN_TYPE = '-'
+		       AND AB.MEMBER_ID = #{id}
+		)
+		GROUP BY TO_CHAR(DT, 'MM'), TO_CHAR(DT, 'w')
+		ORDER BY MONTH
+	</select>
+	
+	<select id="monthlyExpense" resultType="java.util.HashMap">
+		SELECT TO_CHAR(DT, 'MM') MONTH, SUM(AMOUNT) AMOUNT
+		FROM (
+		    SELECT TO_DATE(SUBSTR(TRAN_DT, 0, 10), 'YYYY.MM.DD') DT, AB.AMOUNT
+		      FROM TRAN_HISTORY T
+		     INNER JOIN ACCOUNTBOOK AB ON T.ACCOUNTBOOK_NO = AB.NO
+		     WHERE TRAN_TYPE = '-'
+		       AND AB.MEMBER_ID = #{id}
+		)
+		GROUP BY TO_CHAR(DT, 'MM')
+		ORDER BY MONTH
+	</select>
+	
+	<select id="categoryRate" resultType="java.util.HashMap">
+		 SELECT CD.CODE
+		      , CD.NAME
+		      , SUM(AB.AMOUNT) AMOUNT
+		      , ROUND( 100 * SUM(AB.AMOUNT) / (SELECT SUM(AB.AMOUNT)
+		                                  FROM TRAN_HISTORY T
+		                                 INNER JOIN ACCOUNTBOOK AB ON T.ACCOUNTBOOK_NO = AB.NO
+		                                 WHERE AB.MEMBER_ID = #{id} AND T.TRAN_TYPE = '-'), 2) PERCENTAGE
+		  FROM TRAN_HISTORY T
+		 INNER JOIN ACCOUNTBOOK AB ON T.ACCOUNTBOOK_NO = AB.NO
+		 INNER JOIN CODE CD ON T.CATEGORY_CD = CD.CODE
+		 WHERE AB.MEMBER_ID = #{id} AND TRAN_TYPE = '-'
+		 GROUP BY CD.CODE, CD.NAME
+		 ORDER BY AMOUNT DESC
+	</select>
+	
+	<select id="compareCategory" resultType="java.util.HashMap">
+		 SELECT CD.CODE
+		      , CD.NAME
+		      , SUM(AMOUNT_OUT) AMOUNT
+		      , ROUND( 100 * SUM(AMOUNT_OUT) / (SELECT SUM(AMOUNT_OUT) FROM TRAN_HISTORY_OTHERS), 2 ) PERCENTAGE
+		   FROM TRAN_HISTORY_OTHERS T
+		  INNER JOIN CODE CD ON T.CATEGORY_CD = CD.CODE
+		  GROUP BY CD.CODE, CD.NAME
+		  ORDER BY AMOUNT DESC
+	</select>
+
+	<select id="payTypeCnt" resultType="java.util.HashMap">
+		 	SELECT T.BANK_ACCT_ALIAS, COUNT(*) CNT
+			  FROM TRAN_HISTORY T
+			 INNER JOIN ACCOUNTBOOK AB ON T.ACCOUNTBOOK_NO = AB.NO
+			 WHERE AB.MEMBER_ID = #{id}
+			   AND TRAN_TYPE IN ('-', '이체')
+			   AND AB.AMOUNT > 0
+			 GROUP BY T.BANK_ACCT_ALIAS
+	</select>
+
+	<select id="quarterlyExpense" resultType="java.util.HashMap">
+		 	SELECT DECODE(MONTH, '01', '1Q', '02', '1Q', '03', '1Q',
+			                    '04', '2Q', '05', '2Q', '06', '2Q',
+			                    '07', '3Q', '08', '3Q', '09', '3Q',
+			                    '10', '4Q', '11', '4Q', '12', '4Q') QUARTER
+			     , TRUNC(SUM(AMOUNT)/3) AVG_AMT
+			  FROM (
+				    SELECT TO_CHAR(TO_DATE(SUBSTR(TRAN_DT, 0, 10), 'YYYY.MM.DD'), 'MM') MONTH, AB.AMOUNT
+				      FROM TRAN_HISTORY T
+				     INNER JOIN ACCOUNTBOOK AB ON T.ACCOUNTBOOK_NO = AB.NO 
+				     WHERE MEMBER_ID = #{id} AND TRAN_TYPE = '-'
+				     GROUP BY TO_CHAR(TO_DATE(SUBSTR(TRAN_DT, 0, 10), 'YYYY.MM.DD'), 'MM'), AB.AMOUNT
+				 )
+			 GROUP BY DECODE(MONTH, '01', '1Q', '02', '1Q', '03', '1Q',
+			                        '04', '2Q', '05', '2Q', '06', '2Q',
+			                        '07', '3Q', '08', '3Q', '09', '3Q',
+			                        '10', '4Q', '11', '4Q', '12', '4Q')
+			 ORDER BY QUARTER
+	</select>
+	
+
+</mapper>

@@ -3,7 +3,6 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="acctbook.dao.acctbookDAO"> 
-
 	<resultMap type="calVO" id="calMap">
 		<result column="SET_YM" property="setYM"/>
 		<result column="MEMBER_ID" property="memberId"/>
@@ -18,25 +17,22 @@
 		<result column="AMOUNT" property="amount"/>
 		<result column="TRAN_DT" property="tranDt"/>
 	</resultMap>
+	
+	<resultMap type="budgetVO" id="budgetMap">
+		<result column="SET_YM" property="setYM"/>
+		<result column="MEMBER_ID" property="memberId"/>
+		<result column="BEGIN_DT" property="beginDt"/>	
+		<result column="END_DT" property="endDt"/>
+		<result column="CURRENT_AMT" property="currentAmt"/>
+		<result column="LIMIT" property="limit"/>
+		<result column="CHK" property="chk"/>
+		<result column="AMOUNT" property="amount"/>
+		<result column="DDAY" property="dday"/>
+	</resultMap>
 
-	<insert id="CASHBOOK_INSERT_MYSELF" parameterType="calVO" statementType="CALLABLE">
-        <![CDATA[
-	        { call CASHBOOK_INSERT_MYSELF (
-	                #{amount, mode=IN},
-	                #{setYM, mode=IN},
-	                #{memberId, mode=IN},
-	                #{bankAcctNum, mode=IN},
-	                #{categoryCd, mode=IN},
-	                #{opponentName, mode=IN},
-	                #{tranType, mode=IN},
-	                #{bankAcctAlias, mode=IN},
-	                #{tranMethod, mode=IN},
-	                #{content, mode=IN},
-	                #{tranDt, mode=IN}
-	        )}
-        ]]>
-    </insert>
-
+<!--///////////////////////////////////////-->
+<!--//			 	계좌이체 			 //-->
+<!--///////////////////////////////////////-->
 	<!-- 가장 최근 거래내역 조회 -->
 	<select id="selectLatest" resultMap="calMap">
 		SELECT *
@@ -51,42 +47,104 @@
 		  FROM TRAN_HISTORY H
 		 INNER JOIN ACCOUNTBOOK AB ON AB.NO = H.ACCOUNTBOOK_NO
 	</select>
-	
-	<select id="selectDayIn" parameterType="String" resultType="String">
-		SELECT NVL2(SUM(AMOUNT), SUM(AMOUNT), 0) DAYIN
-		  FROM TRAN_HISTORY H
-		 INNER JOIN ACCOUNTBOOK AB ON AB.NO = H.ACCOUNTBOOK_NO
-		 WHERE TRAN_TYPE = '+'
-		   AND SUBSTR(AB.TRAN_DT, 1, 10) = #{date}
+
+<!--///////////////////////////////////////-->
+<!--//			 	예산 가계부				 //-->
+<!--///////////////////////////////////////-->
+	<!-- 예산 설정한적 있는지 COUNT값으로 확인 -->
+	<select id="monthlyInfo" parameterType="String" resultMap="budgetMap">
+		SELECT * 
+		  FROM BUDGET 
+		 WHERE SET_YM = TO_CHAR(SYSDATE, 'YYYY.MM')
+		   AND MEMBER_ID = #{memberId}
 	</select>
 	
-	<select id="selectDayOut" parameterType="String" resultType="String">
-		SELECT NVL2(SUM(AMOUNT), SUM(AMOUNT), 0) DAYOUT
-		  FROM TRAN_HISTORY H
-		 INNER JOIN ACCOUNTBOOK AB ON AB.NO = H.ACCOUNTBOOK_NO
-		 WHERE H.TRAN_TYPE = '-'
-		   AND SUBSTR(AB.TRAN_DT, 1, 10) = #{date}
+	<select id="bgtExist" parameterType="String" resultType="String">
+		SELECT END_DT
+		  FROM BUDGET 
+		 WHERE SET_YM = #{setYM}
 	</select>
 	
-    <select id="cashSelectMonthIn" resultMap="calMap">
+	<update  id="updateDday" parameterType="HashMap">
+		UPDATE BUDGET SET DDAY = #{dday} WHERE SET_YM = #{setym}
+	</update>
+	
+	<!-- 이번달 총 지출, 수입 -->	
+	<select id="mTotalInOut" parameterType="calVO" resultType="int">
+		SELECT NVL2(SUM(AB.AMOUNT), SUM(AB.AMOUNT), 0) AMOUNT
+		  FROM TRAN_HISTORY H
+		 INNER JOIN ACCOUNTBOOK AB ON AB.NO = H.ACCOUNTBOOK_NO
+		 WHERE H.TRAN_TYPE = #{tranType} 
+		   AND SUBSTR(AB.TRAN_DT, 0, 7) = TO_CHAR(SYSDATE, 'YYYY.MM')
+		   AND AB.MEMBER_ID = #{memberId}
+	</select>
+	
+	<insert id="setMonthlyBudget" parameterType="budgetVO">
+		INSERT INTO BUDGET
+		VALUES (TO_CHAR(SYSDATE, 'YYYY.MM'), #{memberId}, 1
+			 , SUBSTR(LAST_DAY(SYSDATE), 7), #{currentAmt}, #{limit}, 'Y', #{dday})
+	</insert>
+	
+	<update id="updateBudget" parameterType="budgetVO">
+		UPDATE BUDGET 
+		   SET LIMIT = #{limit} 
+		 WHERE MEMBER_ID = #{memberId} AND SET_YM = TO_CHAR(SYSDATE, 'YYYY.MM')
+	</update>
+<!--///////////////////////////////////////-->
+<!--//			 	현금 가계부				 //-->
+<!--///////////////////////////////////////-->
+	
+	<!-- 현금 가계부 > 데이터 저장 -->
+	<insert id="CASHBOOK_INOUT" parameterType="calVO" statementType="CALLABLE">
+        <![CDATA[
+	        { call CASHBOOK_INOUT (
+	                #{amount, mode=IN},
+	                #{setYM, mode=IN},
+	                #{memberId, mode=IN},
+	                #{bankAcctNum, mode=IN},
+	                #{categoryCd, mode=IN},
+	                #{opponentName, mode=IN},
+	                #{tranType, mode=IN},
+	                #{bankAcctAlias, mode=IN},
+	                #{tranMethod, mode=IN},
+	                #{content, mode=IN},
+	                #{tranDt, mode=IN}
+	        )}
+        ]]>
+    </insert>
+	
+	<!-- 달력 로드될 때 화면에 뿌려줄거 : 일별 입금/출금 데이터 -->
+	<select id="cashGroupMonthInOut" parameterType="String" resultMap="calMap">
 		SELECT SUBSTR(AB.TRAN_DT, 1, 10) TRAN_DT, H.TRAN_TYPE, NVL2(SUM(AMOUNT), SUM(AMOUNT), 0) AMOUNT
 		  FROM TRAN_HISTORY H
 		 INNER JOIN ACCOUNTBOOK AB ON AB.NO = H.ACCOUNTBOOK_NO
-		 WHERE TRAN_TYPE = '+'
+		 WHERE TRAN_METHOD = '현금'
+		   AND AB.MEMBER_ID = #{memberId}
 		 GROUP BY SUBSTR(AB.TRAN_DT, 1, 10), H.TRAN_TYPE
 		 ORDER BY TRAN_DT
 	</select>
-	
-	<select id="cashSelectMonthOut" resultMap="calMap">
-		SELECT SUBSTR(AB.TRAN_DT, 1, 10) TRAN_DT, H.TRAN_TYPE, NVL2(SUM(AMOUNT), SUM(AMOUNT), 0) AMOUNT
+
+	<select id="cashAllMonthInOut" parameterType="String" resultMap="calMap">
+		SELECT AB.TRAN_DT
+		     , H.BANK_ACCT_ALIAS
+		     , AB.BANK_ACCT_NUM
+		     , H.OPPONENT_NAME
+		     , H.TRAN_TYPE
+		     , AB.AMOUNT
+             , NVL2(RTRIM(SUBSTR(H.CONTENT, 0, INSTR(H.CONTENT, ';')), ';')
+                    , RTRIM(SUBSTR(H.CONTENT, 0, INSTR(H.CONTENT, ';')), ';'), H.CONTENT) CONTENT
 		  FROM TRAN_HISTORY H
 		 INNER JOIN ACCOUNTBOOK AB ON AB.NO = H.ACCOUNTBOOK_NO
-		 WHERE TRAN_TYPE = '-'
-	 	 GROUP BY SUBSTR(AB.TRAN_DT, 1, 10), H.TRAN_TYPE
-		 ORDER BY TRAN_DT
+         WHERE TRAN_METHOD = '현금'
+           AND AB.MEMBER_ID = #{memberId}
+         ORDER BY AB.TRAN_DT DESC
 	</select>
-	
-	<!-- 계좌 가계부 -->
+
+<!--///////////////////////////////////////-->
+<!--//			 	계좌 가계부				 //-->
+<!--///////////////////////////////////////-->
+
+	<!-- 계좌 가계부 > 데이터 저장 -->
 	<insert id="ACCTBOOK_INOUT" parameterType="calVO" statementType="CALLABLE">
         <![CDATA[
 	        { call ACCTBOOK_INOUT (
@@ -113,6 +171,7 @@
 		 WHERE BANK_ACCT_NUM = #{bankAcctNum}
            AND TRAN_DT BETWEEN #{startDt} AND #{endDt}
            AND TRAN_METHOD = '계좌'
+           AND AMOUNT NOT LIKE '0'
 	</select>
 	
 	<!-- 전체 거래내역 조회 + Filter -->
@@ -124,84 +183,99 @@
            AND TRAN_DT BETWEEN #{startDt} AND #{endDt} 
            AND CONTENT LIKE #{rcvBankAcctNum}
            AND TRAN_METHOD = '계좌'
+           AND AMOUNT NOT LIKE '0'
 	</select>
-	
-	
-<!--///////////////////////////////////////-->
-<!--//			 	계좌 가계부				 //-->
-<!--///////////////////////////////////////-->
 
-<!-- 일별 입금값, 일자 불러오기 -->
-	<select id="acctGroupMonthIn" resultMap="calMap">
+	<!-- 일별 입금값, 일자 불러오기 -->
+	<select id="acctGroupMonthInOut" parameterType="String" resultMap="calMap">
 		SELECT SUBSTR(AB.TRAN_DT, 1, 10) TRAN_DT, H.TRAN_TYPE, NVL2(SUM(AMOUNT), SUM(AMOUNT), 0) AMOUNT
 		  FROM TRAN_HISTORY H
 		 INNER JOIN ACCOUNTBOOK AB ON AB.NO = H.ACCOUNTBOOK_NO
-		 WHERE TRAN_TYPE = '+'
-		   AND TRAN_METHOD = '계좌'
+		 WHERE TRAN_METHOD = '계좌'
+           AND AB.MEMBER_ID = #{memberId}
+           AND AMOUNT NOT LIKE '0'
 		 GROUP BY SUBSTR(AB.TRAN_DT, 1, 10), H.TRAN_TYPE
-		 ORDER BY TRAN_DT
+		 ORDER BY TRAN_DT DESC
 	</select>
 	
-<!-- 	<select id="acctAllMonthIn" resultMap="calMap">
-		SELECT SUBSTR(AB.TRAN_DT, 1, 10) TRAN_DT
-		     , H.BANK_ACCT_ALIAS
-		     , AB.BANK_ACCT_NUM
-		     , H.OPPONENT_NAME
-		     , H.TRAN_TYPE
-		     , AB.AMOUNT
+	<!-- 선택한 일자의 총 입금액 -->
+	<!-- <select id="acctTotalDayIn" parameterType="String" resultType="String">
+		SELECT NVL2(SUM(AMOUNT), SUM(AMOUNT), 0) DAYIN
 		  FROM TRAN_HISTORY H
 		 INNER JOIN ACCOUNTBOOK AB ON AB.NO = H.ACCOUNTBOOK_NO
 		 WHERE TRAN_TYPE = '+'
 		   AND TRAN_METHOD = '계좌'
-		 ORDER BY TRAN_DT
+		   AND SUBSTR(AB.TRAN_DT, 1, 10) = #{date}
+	</select>
+	
+	선택한 일자의 총 출금액
+	<select id="acctTotalDayOut" parameterType="String" resultType="String">
+		SELECT NVL2(SUM(AMOUNT), SUM(AMOUNT), 0) DAYOUT
+		  FROM TRAN_HISTORY H
+		 INNER JOIN ACCOUNTBOOK AB ON AB.NO = H.ACCOUNTBOOK_NO
+		 WHERE H.TRAN_TYPE = '-'
+		   AND TRAN_METHOD = '계좌'
+		   AND SUBSTR(AB.TRAN_DT, 1, 10) = #{date}
 	</select> -->
 	
-	<select id="acctPeriodIn" parameterType="calVO" resultMap="calMap">
-		SELECT SUBSTR(AB.TRAN_DT, 1, 10) TRAN_DT, H.TRAN_TYPE, NVL2(SUM(AMOUNT), SUM(AMOUNT), 0) AMOUNT
-		  FROM TRAN_HISTORY H
-		 INNER JOIN ACCOUNTBOOK AB ON AB.NO = H.ACCOUNTBOOK_NO
-		 WHERE TRAN_TYPE = '+'
-		   AND TRAN_METHOD = '계좌'
-		   AND BANK_ACCT_NUM = #{bankAcctNum}
-		   AND TRAN_DT BETWEEN #{startDt} AND #{endDt} 
-		 GROUP BY SUBSTR(AB.TRAN_DT, 1, 10), H.TRAN_TYPE
-		 ORDER BY TRAN_DT
-	</select>
 	
-<!-- 일별 출금값, 일자 불러오기 -->
-	<select id="acctGroupMonthOut" resultMap="calMap">
-		SELECT SUBSTR(AB.TRAN_DT, 1, 10) TRAN_DT, H.TRAN_TYPE, NVL2(SUM(AMOUNT), SUM(AMOUNT), 0) AMOUNT
-		  FROM TRAN_HISTORY H
-		 INNER JOIN ACCOUNTBOOK AB ON AB.NO = H.ACCOUNTBOOK_NO
-		 WHERE TRAN_TYPE = '-'
-		   AND TRAN_METHOD = '계좌'
-		 GROUP BY SUBSTR(AB.TRAN_DT, 1, 10), H.TRAN_TYPE
-		 ORDER BY TRAN_DT
-	</select>
-	
-	<select id="acctAllMonthInOut" resultMap="calMap">
-		SELECT  SUBSTR(AB.TRAN_DT, 1, 10) TRAN_DT
+	<!-- 입금출금 거래내역 전체 불러오기 -->
+	<select id="acctAllMonthInOut" parameterType="String" resultMap="calMap">
+		SELECT AB.TRAN_DT
 		     , H.BANK_ACCT_ALIAS
 		     , AB.BANK_ACCT_NUM
 		     , H.OPPONENT_NAME
 		     , H.TRAN_TYPE
 		     , AB.AMOUNT
              , H.BALANCE
+             , NVL2(RTRIM(SUBSTR(H.CONTENT, 0, INSTR(H.CONTENT, ';')), ';')
+                    , RTRIM(SUBSTR(H.CONTENT, 0, INSTR(H.CONTENT, ';')), ';'), 'N/A') CONTENT
 		  FROM TRAN_HISTORY H
 		 INNER JOIN ACCOUNTBOOK AB ON AB.NO = H.ACCOUNTBOOK_NO
          WHERE TRAN_METHOD = '계좌'
-         ORDER BY H.NO
+           AND AB.MEMBER_ID = #{memberId}
+           AND AMOUNT NOT LIKE '0'
+         ORDER BY AB.TRAN_DT DESC
 	</select>
 	
-	<select id="acctPeriodOut" parameterType="calVO" resultMap="calMap">
-		SELECT SUBSTR(AB.TRAN_DT, 1, 10) TRAN_DT, H.TRAN_TYPE, NVL2(SUM(AMOUNT), SUM(AMOUNT), 0) AMOUNT
+	<select id="acctPeriodInOut" parameterType="calVO" resultMap="calMap">
+		SELECT AB.TRAN_DT
+		     , H.BANK_ACCT_ALIAS
+		     , AB.BANK_ACCT_NUM
+		     , H.OPPONENT_NAME
+		     , H.TRAN_TYPE
+		     , AB.AMOUNT
+             , H.BALANCE
+             , NVL2(RTRIM(SUBSTR(H.CONTENT, 0, INSTR(H.CONTENT, ';')), ';')
+                    , RTRIM(SUBSTR(H.CONTENT, 0, INSTR(H.CONTENT, ';')), ';'), 'N/A') CONTENT
 		  FROM TRAN_HISTORY H
 		 INNER JOIN ACCOUNTBOOK AB ON AB.NO = H.ACCOUNTBOOK_NO
-		 WHERE TRAN_TYPE = '-'
+		 WHERE TRAN_TYPE = #{tranType}
 		   AND TRAN_METHOD = '계좌'
 		   AND BANK_ACCT_NUM = #{bankAcctNum}
-		   AND TRAN_DT BETWEEN #{startDt} AND #{endDt} 
-		 GROUP BY SUBSTR(AB.TRAN_DT, 1, 10), H.TRAN_TYPE
-		 ORDER BY TRAN_DT
+           AND TRAN_DT BETWEEN #{startDt} AND #{endDt}
+           AND MEMBER_ID = #{memberId}
+           AND AMOUNT NOT LIKE '0'
+		 ORDER BY AB.TRAN_DT DESC
 	</select>
+	
+	<select id="cashPeriodInOut" parameterType="calVO" resultMap="calMap">
+		SELECT AB.TRAN_DT
+		     , H.BANK_ACCT_ALIAS
+		     , AB.BANK_ACCT_NUM
+		     , H.OPPONENT_NAME
+		     , H.TRAN_TYPE
+		     , AB.AMOUNT
+             , NVL2(RTRIM(SUBSTR(H.CONTENT, 0, INSTR(H.CONTENT, ';')), ';')
+                    , RTRIM(SUBSTR(H.CONTENT, 0, INSTR(H.CONTENT, ';')), ';'), 'N/A') CONTENT
+		  FROM TRAN_HISTORY H
+		 INNER JOIN ACCOUNTBOOK AB ON AB.NO = H.ACCOUNTBOOK_NO
+		 WHERE TRAN_TYPE = #{tranType}
+		   AND TRAN_METHOD = '현금'
+		   AND BANK_ACCT_ALIAS = #{bankAcctAlias}
+           AND TRAN_DT BETWEEN #{startDt} AND #{endDt}
+           AND MEMBER_ID = #{memberId}
+		 ORDER BY AB.TRAN_DT DESC
+	</select>
+	
 </mapper>

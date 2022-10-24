@@ -94,7 +94,7 @@
 								<nav aria-label="breadcrumb" role="navigation">
 									<ol class="breadcrumb">
 										<li class="breadcrumb-item">
-											<a href="${pageContext.request.contextPath}/">Home</a>
+											<a href="${pageContext.request.contextPath}/main">Home</a>
 										</li>
 										<li class="breadcrumb-item active" aria-current="page">
 											blank

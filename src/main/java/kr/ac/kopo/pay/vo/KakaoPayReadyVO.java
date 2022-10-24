@@ -1,8 +1,12 @@
 package kr.ac.kopo.pay.vo;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class KakaoPayReadyVO {
 
 	/* 

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="payMapper"> 
+
+	<resultMap type="kakaoPayVO" id="kakaoPayMap">
+		<result column="TID" property="tid"/>
+		<result column="AID" property="aid"/>
+		<result column="CID" property="cid"/>	
+		<result column="PAYMENT_METHOD_TYPE" property="payment_method_type"/>
+		<result column="ITEM_NAME" property="item_name"/>
+		<result column="CREATED_AT" property="created_at"/>
+		<result column="APPROVED_AT" property="approved_at"/>
+		<result column="TOTAL_AMOUNT" property="total"/>
+		<result column="TAX_FREE" property="tax_free"/>
+		<result column="VAT" property="vat"/>
+		<result column="POINT" property="point"/>
+	</resultMap>
+	
+	<resultMap type="oneqPayVO" id="oneqPayMap">
+		<result column="AMOUNT" property="amount"/>
+		<result column="TRAN_TYPE" property="tranType"/>
+		<result column="SET_YM" property="setYM"/>	
+		<result column="MEMBER_ID" property="memberId"/>
+		<result column="CATEGORY_CD" property="categoryCd"/>
+		<result column="OPPONENT_NAME" property="opponentName"/>
+		<result column="CONTENT" property="content"/>
+		<result column="TRAN_DT" property="tranDt"/>
+		<result column="ITEM_NAME" property="itemName"/>
+		<result column="BALANCE" property="balance"/>
+		<result column="BANK_ACCT_NUM" property="bankAcctNum"/>
+		<result column="BANK_ACCT_ALIAS" property="bankAcctAlias"/>
+	</resultMap>
+	
+	<select id="chkAvailable" parameterType="String" resultType="int">
+		SELECT COUNT(*)
+		  FROM ONEQPAY
+		 WHERE MEMBER_ID = #{memberId}
+	</select>
+	
+	<insert id="createPayForID" parameterType="String">
+		INSERT INTO ONEQPAY(BANK_ACCT_NUM, BANK_ACCT_ALIAS, MEMBER_ID)
+		VALUES (SELECT ACCT_NUM FROM BANK_ACCT WHERE MEMBER_ID = #{memberId} AND MAIN_ACCT_CHK = 'Y'
+			 , SELECT ALIAS FROM BANK_ACCT WHERE MEMBER_ID = #{memberId} AND MAIN_ACCT_CHK = 'Y'
+			 , #{memberId})
+	</insert>
+	
+	<select id="selectPayAcctInfo" parameterType="String" resultMap="oneqPayMap">
+		SELECT BANK_ACCT_NUM, BANK_ACCT_ALIAS, BALANCE, MEMBER_ID
+		  FROM ONEQPAY WHERE MEMBER_ID = #{memberId}
+	</select>
+	
+	<insert id="kakaoLog" parameterType="kakaoPayVO">
+		INSERT INTO KAKAOPAY_LOG
+		VALUES (  #{tid}
+			    , #{aid}
+			    , #{cid}
+			    , #{payment_method_type}
+			    , #{item_name}
+			    , #{created_at}
+			    , #{approved_at}
+			    , #{total}
+			    , #{tax_free}
+			    , #{vat}
+			    , #{point} )
+	</insert>
+	  
+	<insert id="PAYMONEY_TRAN" parameterType="OneqPayVO" statementType="CALLABLE">
+        <![CDATA[
+	        { call PAYMONEY_TRAN (
+	                #{amount, mode=IN},
+	                #{tranType, mode=IN},
+	                #{setYM, mode=IN},
+	                #{memberId, mode=IN},
+	                #{categoryCd, mode=IN},
+	                #{opponentName, mode=IN},
+	                #{tranDt, mode=IN},
+	                #{itemName, mode=IN},
+	                #{bankAcctNum, mode=IN},
+	                #{bankAcctAlias, mode=IN}
+	        )}
+        ]]>
+        
+    </insert>
+	
+</mapper>

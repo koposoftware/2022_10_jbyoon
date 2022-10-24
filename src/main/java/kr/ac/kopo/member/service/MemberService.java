@@ -35,6 +35,17 @@ public class MemberService {
 		System.out.println("MemberService/saveFile");
 		//memberDAO.insertFile();
 	}
+
+	public void UpdatePayChk(String id) {
+		memberDAO.UpdatePayChk(id);
+	}
+
+	// kakao 회원 존재여부 확인
+//	public MemberVO loginKakao(MemberVO vo) {
+//		vo = memberDAO.loginKakao(vo);
+//		return vo;
+//	}
+	
 	
 	// fixedDelay=3000 <=> 3초에 1번 스케줄러 돌림
 		// 분 시 일 월 요일(0-6)

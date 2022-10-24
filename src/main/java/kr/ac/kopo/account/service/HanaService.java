@@ -16,8 +16,8 @@ public class HanaService implements AccountService {
 	private AccountDAO acctDao;
 	
 	@Override
-	public List<HanaAccountVO> selectAll(String id) {
-		List<HanaAccountVO> list = acctDao.selectAll(id);
+	public List<HanaAccountVO> selectAcctList(String id) {
+		List<HanaAccountVO> list = acctDao.selectAcctList(id);
 		return list;
 	}
 

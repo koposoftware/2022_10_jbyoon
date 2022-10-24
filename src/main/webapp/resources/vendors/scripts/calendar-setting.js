@@ -12,12 +12,12 @@ jQuery(document).ready(function () {
 (function () {
 	"use strict";
 	// ------------------------------------------------------- //
-	// Calendar
+	// calendarCash
 	// ------------------------------------------------------ //
 	jQuery(function () {
 		// page is ready
 		
-		jQuery("#calendarCash").fullCalendar({
+		jQuery("#calendar").fullCalendar({
 			themeSystem: "bootstrap4",
 			// emphasizes business hours
 			businessHours: false,

@@ -13,8 +13,15 @@ public class MemberDAO {
 	private SqlSessionTemplate sst;
 	
 	public MemberVO selectUser(MemberVO mvo) {
-		MemberVO authMember = sst.selectOne("member.dao.memberDAO.selectUser", mvo);
-		return authMember;
+//		if(mvo.getType().equals("K")) {
+//			// kakao login
+//			mvo = sst.selectOne("member.dao.memberDAO.selectUserKakao", mvo);
+//		} else {
+//			// 일반 login
+//			mvo = sst.selectOne("member.dao.memberDAO.selectUser", mvo);			
+//		}
+		mvo = sst.selectOne("member.dao.memberDAO.login", mvo);
+		return mvo;
 	}
 	
 	public String selectiD(MemberVO mvo) {
@@ -35,5 +42,22 @@ public class MemberDAO {
 	public void UpdateOpenType(String id) {
 		sst.update("member.dao.memberDAO.updateOpenChk", id);
 	}
+
+	public void UpdatePayChk(String id) {
+		String res = sst.selectOne("member.dao.memberDAO.checkPayAgreed", id);
+		System.out.println("res : " + res);
+		if(res.equals("N")) {
+			sst.update("member.dao.memberDAO.updatePayChk", id);			
+		}
+	}
+	
+//------------------------------------------
+//  카카오 로그인 
+//------------------------------------------	
+//    public MemberVO loginKakao(MemberVO vo) {
+//    	vo = sst.selectOne("member.dao.memberDAO.selectUserKakao", vo);
+//		return vo;
+//	}
+	
 	
 }

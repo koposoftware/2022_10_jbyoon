@@ -1,7 +1,5 @@
 package kr.ac.kopo.account.controller;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -19,6 +17,8 @@ import kr.ac.kopo.account.vo.BankAccountSearchResponseVO;
 import kr.ac.kopo.account.vo.BankBalanceRequestVO;
 import kr.ac.kopo.account.vo.BankRequestToken;
 import kr.ac.kopo.account.vo.BankResponseToken;
+import kr.ac.kopo.member.service.MemberService;
+import kr.ac.kopo.util.CookieManager;
 import kr.ac.kopo.util.OpenBankUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,8 +30,8 @@ public class OpenBankApiController {
 	
 	// 수정 : session, openBnakUtil에 @autowired 붙임!!
 	
-	@Autowired
-	private final HttpSession session;
+	//@Autowired
+	//private final HttpSession session;
 	@Autowired
     private final OpenBankUtil openBankUtil;
     /**
@@ -63,6 +63,9 @@ public class OpenBankApiController {
     
     private String redirectUri = "http://localhost:8080/auth/openbank/callback";
     private final OpenBankService openBankService;
+    @Autowired
+    private MemberService memberService;
+    
 	
 	
 	/* open banking 사용자 인증 api 호출 페이지로 이동 */
@@ -78,23 +81,56 @@ public class OpenBankApiController {
 		
 		return "account/openbank/OpenAuth";
 	}
-	
-    /**
+
+//	테스트용으로 만듦. 나중에 지우기!!!
+	@GetMapping("test/callback")
+	public String testOpenAccountList() {
+		return "account/openbank/accountList";
+	}
+//	여기까지 테스트 메소드 끝.
+	/**
      * 토큰요청
      * @param model
      * @return
+	 * @throws Exception 
      */
     @GetMapping("/auth/openbank/callback")
-    public String getToken(@RequestParam("code") String code, BankRequestToken bankRequestToken, Model model){
-    	System.out.println("callback / code : " + code);
+    public String getToken(@RequestParam("code") String code, BankRequestToken bankRequestToken, Model model) throws Exception{
+    	// 1. code 받기
+    	System.out.println("#1) callback / code : " + code);
     	bankRequestToken.setCode(code);
     	
+    	
+    	// 2. code를 통해 token값 받음
         BankResponseToken token = openBankService.requestToken(bankRequestToken);
-        System.out.println("callback / token : " + token);
+        //model.addAttribute("bankResponseToken",token);
+        log.info("\n#2) bankResponseToken={}", token);
         
-        model.addAttribute("bankResponseToken",token);
-        log.info("bankResponseToken={}", token);
-        return "account/openbank/bank";
+        // 3. 사용자가 오픈뱅킹 동의함 (openType 업데이트)
+        CookieManager cookie = new CookieManager();
+		String id = cookie.findCookie("id");
+		//memberService.UpdateOpenType(id);
+        
+        // 4. token으로 오픈뱅킹 API 호출 : 오픈뱅킹 계좌들 정보 조회
+		AccountSearchRequestVO asrVO = new AccountSearchRequestVO();
+		asrVO.setUser_seq_no(token.getUser_seq_no());
+		asrVO.setInclude_cancel_yn("Y");
+		asrVO.setSort_order("D");
+		
+		System.out.println("asrVO : \n" + asrVO + "\n");
+		
+		BankAccountSearchResponseVO account = openBankService.findAccount(asrVO);
+        model.addAttribute("bankAccounts",account);
+        model.addAttribute("useCode",useCode);
+        //model.addAttribute("access_token",access_token);
+        
+        // 5. 오픈뱅킹 계좌 목록 페이지로 이동 (OpenAccounts, accountList 페이지 합치기)
+        // return "account/OpenAccounts";
+        return "account/openbank/accountList";
+        
+    	
+        // 아래는 삭제하기
+        //return "account/openbank/bank";
     }
 
     /**
@@ -103,17 +139,19 @@ public class OpenBankApiController {
      * @param accountSearchRequestVO
      * @param model
      * @return
+     * @throws Exception 
      */
     @GetMapping("/account/list")
-    public String searchAccountList(AccountSearchRequestVO accountSearchRequestVO, Model model){
-        BankAccountSearchResponseVO account = openBankService.findAccount(accountSearchRequestVO);
-        
+    public String searchAccountList(AccountSearchRequestVO accountSearchRequestVO, Model model) throws Exception{
+    	
+    	BankAccountSearchResponseVO account = openBankService.findAccount(accountSearchRequestVO);
         System.out.println("searchAccountList : " + account);
-        
         model.addAttribute("bankAccounts",account);
         model.addAttribute("useCode",useCode);
         //model.addAttribute("access_token",access_token);
         
+        // 3. 오픈뱅킹 계좌 목록 페이지로 이동 
+        // return "account/OpenAccounts";
         return "account/openbank/accountList";
     }
 

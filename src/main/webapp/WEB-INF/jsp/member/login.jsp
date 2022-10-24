@@ -1,33 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-
-
 <!DOCTYPE html>
 <html>
 	<head>
 		<!-- Basic Page Info -->
 		<meta charset="utf-8" />
-		<title>DeskApp - Bootstrap Admin Dashboard HTML Template</title>
+		<title>login</title>
 
 		<!-- Site favicon -->
-		<link
-			rel="apple-touch-icon"
-			sizes="180x180"
-			href="${pageContext.request.contextPath}/resources/vendors/images/apple-touch-icon.png"
-		/>
-		<link
-			rel="icon"
-			type="image/png"
-			sizes="32x32"
-			href="${pageContext.request.contextPath}/resources/vendors/images/favicon-32x32.png"
-		/>
-		<link
-			rel="icon"
-			type="image/png"
-			sizes="16x16"
-			href="${pageContext.request.contextPath}/resources/vendors/images/favicon-16x16.png"
-		/>
+		<link 
+			rel="icon" type="image/png"
+			href="${pageContext.request.contextPath}/resources/vendors/images/bank/hana_logo.png">
 
 		<!-- Mobile Specific Metas -->
 		<meta
@@ -49,48 +33,24 @@
 		/>
 		<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/vendors/styles/style.css" />
 
-		<!-- Global site tag (gtag.js) - Google Analytics -->
-		<script
-			async
-			src="https://www.googletagmanager.com/gtag/js?id=G-GBZ3SGGX85"
-		></script>
-		<script>
-			window.dataLayer = window.dataLayer || [];
-			function gtag() {
-				dataLayer.push(arguments);
-			}
-			gtag("js", new Date());
-
-			gtag("config", "G-GBZ3SGGX85");
-		</script>
-		<!-- Google Tag Manager -->
-		<script>
-			(function (w, d, s, l, i) {
-				w[l] = w[l] || [];
-				w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
-				var f = d.getElementsByTagName(s)[0],
-					j = d.createElement(s),
-					dl = l != "dataLayer" ? "&l=" + l : "";
-				j.async = true;
-				j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
-				f.parentNode.insertBefore(j, f);
-			})(window, document, "script", "dataLayer", "GTM-NXZMQSS");
-		</script>
-		<!-- End Google Tag Manager -->
+	
 	</head>
 	<body class="login-page">
 		<div class="login-header box-shadow">
 			<div class="container-fluid d-flex justify-content-between align-items-center">
 				<div class="brand-logo">
-					<a href="${pageContext.request.contextPath}/login">
-						<img src="${pageContext.request.contextPath}/resources/vendors/images/deskapp-logo.svg" alt="" />
+					<a href="/main" title="메인화면으로 이동"
+						style="color: black; text-align: center;"> <img
+						src="https://image.kebhana.com/cont/common/img/newmain2021/logo.png"
+						alt="하나은행 로고" class="dark-logo"
+						style="margin: auto; display: block;" />
 					</a>
 				</div>
-				<div class="login-menu">
+				<%-- <div class="login-menu">
 					<ul>
 						<li><a href="${pageContext.request.contextPath}/register">Register</a></li>
 					</ul>
-				</div>
+				</div> --%>
 			</div>
 		</div>
 		<div
@@ -105,7 +65,7 @@
 					<div class="col-md-6 col-lg-5">
 						<div class="login-box bg-white box-shadow border-radius-10">
 							<div class="login-title">
-								<h2 class="text-center text-primary">Login</h2>
+								<h2 class="text-center text-primary">로그인이 필요합니다</h2>
 							</div>
 							
 							<form:form class="login-form" action="${ pageContext.request.contextPath }/login" 
@@ -185,17 +145,21 @@
 								<div class="row">
 									<div class="col-sm-12">
 										<div class="input-group mb-0">
-											<input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In">
+											<!-- <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In"> -->
+											<a id="kakao-login-btn"
+												href="${kakao_url}"
+												class="btn btn-kakao btn-user btn-block"> 
+												<img id="kakao-link-btn" src="${pageContext.request.contextPath}/resources/vendors/images/bank/kakao_login_medium_wide.png">
+											</a>
 										</div>
-										<div
-											class="font-16 weight-600 pt-10 pb-10 text-center"
-											data-color="#707373">
-											OR
+										<div class="input-group mb-0" style="padding-left: 30px; padding-block: 10px;">
+											<input class="btn btn-primary btn-lg btn-block" type="submit" value="하나 계정 로그인" style="width: 300px; height: 45px; background-color: #019591; border-color: #019591;">
 										</div>
-										<div class="input-group mb-0">
+										<div class="input-group mb-0" style="padding-left: 30px; padding-block: 10px;">
 											<a  class="btn btn-outline-primary btn-lg btn-block"
+												style="width: 300px; height: 45px; border-color: #019591; color: #019591;"
 												href="${pageContext.request.contextPath}/member/register">
-												Register To Create Account</a>
+												회원가입</a>
 										</div>
 									</div>
 								</div>
@@ -211,15 +175,14 @@
 		<script src="${pageContext.request.contextPath}/resources/vendors/scripts/script.min.js"></script>
 		<script src="${pageContext.request.contextPath}/resources/vendors/scripts/process.js"></script>
 		<script src="${pageContext.request.contextPath}/resources/vendors/scripts/layout-settings.js"></script>
-		<!-- Google Tag Manager (noscript) -->
-		<noscript
-			><iframe
-				src="https://www.googletagmanager.com/ns.html?id=GTM-NXZMQSS"
-				height="0"
-				width="0"
-				style="display: none; visibility: hidden"
-			></iframe
-		></noscript>
-		<!-- End Google Tag Manager (noscript) -->
+		
+		<script>
+			$('#kakao-login-btn').click(function(){
+				Kakao.init("1b55a15d629fd7d609f6aba04731f513");
+		        Kakao.Link.sendCustom({
+		            templateId: 84293
+		        });
+			});
+		</script>
 	</body>
 </html>

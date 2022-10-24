@@ -45,6 +45,13 @@ public class AccountController {
 		return date;
 	}
 	
+	// 계좌번호 마스킹(뒤 5자리)
+	public String accountNoMasking(String accountNo) throws Exception {
+		if(accountNo.length() > 5) {
+			accountNo = accountNo.substring(0, accountNo.length()-5) + "*****";
+		}
+		return accountNo;
+	}
 	
 	@GetMapping("/account/createForm")
 	public String CreateAccount(Model model) {
@@ -87,7 +94,7 @@ public class AccountController {
 		System.out.println("쿠키값 : " + id);
 
 		List<HanaAccountVO> list = new ArrayList<>();
-		list = acctService.selectAll(id);
+		list = acctService.selectAcctList(id);
 		
 		request.setAttribute("hanaList", list);
 
@@ -102,7 +109,12 @@ public class AccountController {
 		
 		// 계좌 정보 조회 -> 계좌-가계부 페이지로 넘김
 		List<HanaAccountVO> list = new ArrayList<>();
-		list = acctService.selectAll(id);
+		list = acctService.selectAcctList(id);
+		
+//		String acctNo = accountNoMasking(list.get(0).getAcctNum());
+//		list.get(0).setAcctNum_masked(acctNo);
+//		System.out.println("fdsfsfd : " + acctNo);
+		
 		model.addAttribute("acctList", list);
 		
 		return "account/Transfer1";
@@ -119,6 +131,14 @@ public class AccountController {
 		
 		String bal = acctService.selectBalance(calVO.getBankAcctNum());
 		calVO.setBalanceFm(bal);
+		
+		String[] rawBalance = calVO.getBalanceFm().split(",");
+		String temp = "";
+		for(int i = 0; i < rawBalance.length; i++) {
+			temp += rawBalance[i];
+		}
+		calVO.setBalance(Integer.parseInt(temp));
+		System.out.println(calVO.getBalance());
 		
 		model.addAttribute("balanceList", calVO);
 		
@@ -179,13 +199,15 @@ public class AccountController {
 		calVO.setSetYM(date.substring(0, 7));
 		calVO.setMemberId(id);
 		calVO.setBankAcctNum(strArr[1]);
-		calVO.setCategoryCd(9); // '금융' default
+		calVO.setCategoryCd(0); // '기타' default
 		calVO.setOpponentName(rcvName);
 		calVO.setTranType("-");
 		calVO.setBankAcctAlias(strArr[0]);
 		calVO.setTranMethod("계좌");
 		calVO.setContent(content + ";" + acctService.selectBankNm(rcvBank) + ";" + rcvBankAcctNum);
 		calVO.setTranDt(date);
+		
+		System.out.println("이체 전!!! \n" + calVO);
 
 		acctService.insertTran(calVO);
 		
@@ -220,7 +242,7 @@ public class AccountController {
 		
 		// 계좌 정보 조회 -> 계좌-가계부 페이지로 넘김
 		List<HanaAccountVO> list = new ArrayList<>();
-		list = acctService.selectAll(id);
+		list = acctService.selectAcctList(id);
 		model.addAttribute("acctList", list);
 		
 		//CalendarVO vo = new CalendarVO();

@@ -6,27 +6,12 @@
 	<head>
 		<!-- Basic Page Info -->
 		<meta charset="utf-8" />
-		<title>DeskApp - Bootstrap Admin Dashboard HTML Template</title>
+		<title>거래중</title>
 
 		<!-- Site favicon -->
-		<link
-			rel="apple-touch-icon"
-			sizes="180x180"
-			href="${pageContext.request.contextPath}/resources/vendors/images/apple-touch-icon.png"
-		/>
-		<link
-			rel="icon"
-			type="image/png"
-			sizes="32x32"
-			href="${pageContext.request.contextPath}/resources/vendors/images/favicon-32x32.png"
-		/>
-		<link
-			rel="icon"
-			type="image/png"
-			sizes="16x16"
-			href="${pageContext.request.contextPath}/resources/vendors/images/favicon-16x16.png"
-		/>
-
+		<link rel="icon" type="image/png" href="${pageContext.request.contextPath}/resources/vendors/images/bank/hana_logo.png">
+		
+		
 		<!-- Mobile Specific Metas -->
 		<meta
 			name="viewport"
@@ -47,39 +32,32 @@
 		/>
 		<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/vendors/styles/style.css" />
 
-		<!-- Global site tag (gtag.js) - Google Analytics -->
-		<script
-			async
-			src="https://www.googletagmanager.com/gtag/js?id=G-GBZ3SGGX85"
-		></script>
+		<!-- header를 위한 CSS -->
+		<!-- Bootstrap -->
+		<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/mainview/plugins/bootstrap/bootstrap.min.css">
+		<!-- FontAwesome -->
+		<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/mainview/plugins/fontawesome/css/all.min.css">
+		<!-- Animation -->
+		<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/mainview/plugins/animate-css/animate.css">
+		<!-- Template styles-->
+		<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/mainview/css/style.css">
+		
+
 		<script src="https://code.jquery.com/jquery-3.6.1.js"
 				integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI="
 				crossorigin="anonymous"></script>
-				
-		<script>
-			window.dataLayer = window.dataLayer || [];
-			function gtag() {
-				dataLayer.push(arguments);
-			}
-			gtag("js", new Date());
-
-			gtag("config", "G-GBZ3SGGX85");
-		</script>
-		<!-- Google Tag Manager -->
-		<script>
-			(function (w, d, s, l, i) {
-				w[l] = w[l] || [];
-				w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
-				var f = d.getElementsByTagName(s)[0],
-					j = d.createElement(s),
-					dl = l != "dataLayer" ? "&l=" + l : "";
-				j.async = true;
-				j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
-				f.parentNode.insertBefore(j, f);
-			})(window, document, "script", "dataLayer", "GTM-NXZMQSS");
-		</script>
-		<!-- End Google Tag Manager -->
 		
+		<style>
+		.vl {
+			border-left: 2px solid #019591;
+			height: 500px;
+			position: absolute;
+			left: 50%;
+			margin-left: -3px;
+			top: 0;
+		}
+		</style>
+
 		<script>
 		$(document).ready(function(){
 			$('#balanceBtn').click(function(){
@@ -109,7 +87,96 @@
 					alert('실패!');
 				});
 			});
-		
+			/* "전액" 버튼 클릭 시 아래 실행 */
+			$('#allBtn').click(function(){
+				const bankAcctNum = $('#acctNum').val();
+				
+				$.ajax({
+					url:"/transfer/balance",
+					type:"POST",
+					data:{
+						bankAcctNum : bankAcctNum
+					},
+				})
+				.done(function(data){ 
+					var bal = JSON.parse(data); // data 객체화 (배열처리)
+					//alert(data);
+					$("#amount").attr("value", bal.balance);
+				})
+				.fail(function(data){
+					alert('실패!');
+				});
+			});
+			
+			/* "1만" 버튼 클릭 시 아래 실행 */
+			$('#10000').click(function(){
+				const amount = $('#amount').val(); // 금액 입력할 부분
+				//CheckIfOverBalance(amount)
+				
+				if(amount === null || amount === ''){
+					$("#amount").attr("value", Number(10000));
+				} else {
+					$("#amount").attr("value", Number(amount) + Number(10000));
+				}
+			});
+			
+			/* "5만" 버튼 클릭 시 아래 실행 */
+			$('#50000').click(function(){
+				const amount = $('#amount').val(); // 금액 입력할 부분
+				//CheckIfOverBalance(amount)
+				
+				if(amount === null || amount === ''){
+					$("#amount").attr("value", Number(50000));
+				} else {
+					$("#amount").attr("value", Number(amount) + Number(50000));
+				}
+			});
+			
+			/* "10만" 버튼 클릭 시 아래 실행 */
+			$('#100000').click(function(){
+				const amount = $('#amount').val(); // 금액 입력할 부분
+				//CheckIfOverBalance(amount)
+				
+				if(amount === null || amount === ''){
+					$("#amount").attr("value", Number(100000));
+				} else {
+					$("#amount").attr("value", Number(amount) + Number(100000));
+				}
+			});
+			/* "100만" 버튼 클릭 시 아래 실행 */
+			$('#1000000').click(function(){
+				const amount = $('#amount').val(); // 금액 입력할 부분
+				//CheckIfOverBalance(amount)
+				
+				if(amount === null || amount === ''){
+					$("#amount").attr("value", Number(1000000));
+				} else {
+					$("#amount").attr("value", Number(amount) + Number(1000000));
+				}
+			});
+			/* function CheckIfOverBalance(amount){
+				const bankAcctNum = $('#acctNum').val();
+				
+				$.ajax({
+					url:"/transfer/balance",
+					type:"POST",
+					data:{
+						bankAcctNum : bankAcctNum
+					},
+				})
+				.done(function(data){ 
+					var bal = JSON.parse(data); // data 객체화 (배열처리)
+					if(Number(amount)+ Number(10000) < Number(bal.balance)){
+						$("#amount").attr("value", Number(amount) + Number(10000));
+					}
+				})
+				.fail(function(data){
+					alert('실패!');
+				});
+				
+				
+			} */
+			
 			$('#confirmBtn').click(function(){
 				
 				let acctNum = $('#acctNum').val();
@@ -140,25 +207,15 @@
 						data:data,
 					})
 					.done(function(data){ 
-						alert(data);
 						var calData = JSON.parse(data); // data 객체화 (배열처리)
-						console.log(calData);
-						alert(calData.amount);
-						
+						//console.log(calData);
 						
 						var html = '';
 						html += '<tr>';
-						html += '<th>1</th>';
-						html += '<td>' + calData.bankAcctNum + '</td>';
-						html += '<td>' + calData.rcvBankName + '\n' + calData.rcvBankAcctNum + '</td>';
-						html += '<td>' + calData.amountFm + '</td>';
-						html += '<td>' + calData.opponentName + '</td>';
-						if(calData.chkTranStatus === '정상'){
-							html += '<td><span class="badge badge-success">' + calData.chkTranStatus + '</span></td>';
-						} else {
-							html += '<td><span class="badge badge-secondary">' + calData.chkTranStatus + '</span></td>';
-						}
-						
+						html += '<td style="font-size: 11px;">' + calData.bankAcctNum + '</td>';
+						html += '<td style="font-size: 11px;">' + calData.rcvBankName + '<br>' + calData.rcvBankAcctNum + '</td>';
+						html += '<td style="font-size: 11px;">' + calData.amountFm + '</td>';
+						html += '<td style="font-size: 11px;">' + calData.opponentName + '</td>';
 						html += '</tr>';
 						$('#tbodyInfo').empty();
 						$('#tbodyInfo').append(html);
@@ -171,6 +228,7 @@
 					
 				}
 				
+				// account/controller
 				$('#resultBtn').click(function(){
 					$.ajax({
 						url:"/transfer/action",
@@ -178,8 +236,6 @@
 						data:data,
 					})
 					.done(function(data){ 
-						alert(data);
-						
 						// 결과 페이지로 이동
 						location.href='${pageContext.request.contextPath}/transfer/result';
 					})
@@ -225,20 +281,27 @@
 		
 	</head>
 	<body>
-		<jsp:include page="/WEB-INF/jsp/include/header.jsp"/>
-		<jsp:include page="/WEB-INF/jsp/include/right-sidebar.jsp"/>
-		<jsp:include page="/WEB-INF/jsp/include/left-side-bar.jsp"/>
+		
+		<!-- header-->
+		<jsp:include page="/WEB-INF/jsp/include/header.jsp">
+			<jsp:param value="${dday}" name="dday"/>
+		</jsp:include>
 		
 		<div class="mobile-menu-overlay"></div>
-
-	<div class="main-container">
+	
+	<!-- START -->
+	
+	<div class="main-container" style="padding-right: 300px;">
 		<div class="pd-ltr-20 xs-pd-20-10">
 			<div class="min-height-200px">
+				<br> <br>
+				
 				<div class="page-header">
 					<div class="row">
 						<div class="col-md-6 col-sm-12">
 							<div class="title">
 								<h2>계좌 이체</h2>
+								<p>이체정보를 입력해주세요.</p>
 							</div>
 							<nav aria-label="breadcrumb" role="navigation">
 								<ol class="breadcrumb">
@@ -263,147 +326,175 @@
 						</div>
 					</div>
 				</div>
+				
+				
+				
 				<div class="pd-20 bg-white border-radius-4 box-shadow mb-30">
-					
-					<h3 style="padding:10px;">STEP 1. 이체정보 입력</h3>
-					<table border="1" bordercolor="grey" width="500" height="300" align="center">
-						<tr align="center" bgcolor="grey">
-							<p>
-							<td colspan="2" style="color: white">이체정보를 입력해주세요</td>
-							</p>
-						</tr>
-						<tr>
-							<td align="center" bgcolor="grey" style="color: white">출금계좌번호</td>
-							<td style="padding: 10px;">
-								<div style="float:left;">
-									<select class="form-control" id="acctNum" name="acctNum">
-										<c:forEach items="${acctList}" var="account">
-											<option value="${account.alias}/${account.acctNum}">
-												${account.alias} / ${account.acctNum}
-											</option>
-										</c:forEach>
+					<!-- 10월 -->
+					<!-- div left : 이번달 총 지출, 총 수입 // div right : 분석 버튼-->
+					<br> <br>
+					<div class="row">
+						<div class="col-6 text-center" style="padding: 50px;">
+							<h3 style="padding:10px;">STEP 1. 필수정보입력</h3>
+							<br>
+							
+							<div class="row">
+								<div class="col-3 text-right">
+									<h6>출금계좌번호</h6>
+								</div>
+								<div class="col-9 text-left">
+									<div style="float:left;">
+										<select class="form-control" id="acctNum" name="acctNum">
+											<c:forEach items="${acctList}" var="account">
+												<option value="${account.alias}/${account.acctNum}">
+													${account.alias} / ${account.acctNum}
+												</option>
+											</c:forEach>
+										</select>
+									</div>
+									<div style="float:right; align-content: center;">
+										<button id="balanceBtn" type="button" class="btn btn-secondary btn-sm"
+												data-toggle="modal" data-target="#balance-modal" style="padding: 12px;">출금가능금액</button>
+									</div>
+								</div>
+							</div>
+							<br>
+							<div class="row">
+								<div class="col-3 text-right">
+									<h6>입금은행</h6>
+								</div>
+								<div class="col-9 text-left">
+									<select id="rcvBank" name="rcvBank"
+											class="custom-select2 form-control select2-hidden-accessible"
+											name="state" style="width: 100%; height: 38px"
+											data-select2-id="1" tabindex="-1" aria-hidden="true">
+		
+										<optgroup label="자주 찾는 은행">
+											<option value="99">은행 이름을 선택하세요</option>
+											<option value="80">KEB하나은행</option>
+											<option value="81">우리은행</option>
+											<option value="82">KB국민은행</option>
+											<option value="83">신한은행</option>
+											<option value="84">기업은행</option>
+											<option value="85">대구은행</option>
+											<option value="86">산업은행</option>
+											<option value="87">삼성증권</option>
+											<option value="88">카카오뱅크</option>
+										</optgroup>
 									</select>
 								</div>
-								<div style="float:right; align-content: center;">
-									<button id="balanceBtn" type="button" class="btn btn-secondary btn-sm"
-											data-toggle="modal" data-target="#balance-modal" style="padding: 12px;">출금가능금액</button>
-								</div>
-							</td>
-						</tr>
-						<tr>
-							<td align="center" bgcolor="grey" style="color: white">입금은행</td>
-							<td style="padding: 10px;">
-								<select id="rcvBank" name="rcvBank"
-									class="custom-select2 form-control select2-hidden-accessible"
-									name="state" style="width: 100%; height: 38px"
-									data-select2-id="1" tabindex="-1" aria-hidden="true">
-	
-									<optgroup label="자주 찾는 은행">
-										<option value="99">은행 이름을 선택하세요</option>
-										<option value="80">KEB하나은행</option>
-										<option value="81">우리은행</option>
-										<option value="82">KB국민은행</option>
-										<option value="83">신한은행</option>
-										<option value="84">기업은행</option>
-										<option value="85">대구은행</option>
-										<option value="86">산업은행</option>
-										<option value="87">삼성증권</option>
-										<option value="88">카카오뱅크</option>
-									</optgroup>
-								</select>
-							</td>
-
-						</tr>
-						<tr>
-							<td align="center" bgcolor="grey" style="color: white">입금계좌번호</td>
-							<td style="padding: 10px;"><input type="text" class="form-control"
-								id="rcvBankAcctNum" name="rcvBankAcctNum"></td>
-						</tr>
-						<tr>
-							<td align="center" bgcolor="grey" style="color: white">이체금액</td>
-							<td style="padding: 10px;"><input type="text" class="form-control" id="amount"
-								name="amount" placeholder="금액을 입력하세요"><br>
-								<button id="amtAll" type="button" class="btn btn-secondary btn-sm">전액</button>
-								<button id="amt1" type="button" class="btn btn-secondary btn-sm">1만</button>
-								<button id="amt5" type="button" class="btn btn-secondary btn-sm">5만</button>
-								<button id="amt10" type="button" class="btn btn-secondary btn-sm">10만</button>
-								<button id="amt100" type="button" class="btn btn-secondary btn-sm">100만</button>
-							</td>
-						</tr>
-						<tr>
-							<td align="center" bgcolor="grey" style="color: white">계좌비밀번호</td>
-							<td style="padding: 10px;"><input type="password" class="form-control" id="acctPw"
-								name="acctPw"></td>
-						</tr>
-					</table>
-					
-					<br><br>
-					
-					<h3 style="padding:10px;">선택정보입력</h3>
-					<table border="1" bordercolor="grey" width="500" height="300" align="center" >
-						<tr>
-							<td align="center" bgcolor="grey" style="color: white">내 통장 표시</td>
-							<td style="padding: 10px;"><input type="text" class="form-control"
-								id="content" name="content" placeholder="14자 이내, 통장에는 6자까지 표시"></td>
-						</tr>
-						<tr>
-							<td align="center" bgcolor="grey" style="color: white">받는분 통장 표시</td>
-							<td style="padding: 10px;"><input type="text" class="form-control"
-								id="rcvContent" name="rcvContent" placeholder="10자 이내, 입력하지 않으면 예금주명"></td>
-						</tr>
-						<tr>
-							<td align="center" bgcolor="grey" style="color: white">받는분 예금주명</td>
-							<td style="padding: 5px;"><input type="text" class="form-control"
-								id="rcvName" name="rcvName" placeholder="착오송금 방지를 위한 입금계좌 예금주명"></td>
-						</tr>
-						
-					</table>
-					<br><br>
-					<button id="confirmBtn" type="button" class="btn btn-primary btn-lg"
-							data-toggle="modal" data-target="#confirm-modal" >이체하기</button>
-				</div>
-				
-				<br>
-<!-- 	
-				<div class="pd-20 bg-white border-radius-4 box-shadow mb-30">
-
-					<h3 style="padding:10px;">STEP 2. 이체정보 확인</h3>
-					<table id="chkInfo" class="table table-bordered">
-						<thead>
-							<tr>
-								<th scope="col">No.</th>
-								<th scope="col">출금계좌번호</th>
-								<th scope="col">입금계좌번호</th>
-								<th scope="col">이체금액(원)</th>
-								<th scope="col">받는분 예금주명</th>
-								<th scope="col">결과</th>
-							</tr>
-						</thead>
-						<tbody id="tbodyInfo">
+							</div>
+							<br> 
 							
-						</tbody>
-					</table>
+							<div class="row">
+								<div class="col-3 text-right">
+									<h6>입금계좌번호</h6>
+								</div>
+								<div class="col-9 text-left">
+									<input type="text" class="form-control" id="rcvBankAcctNum" name="rcvBankAcctNum">
+								</div>
+							</div>
+							<br>
+							<div class="row">
+								<div class="col-3 text-right">
+									<h6>이체금액</h6>
+								</div>
+								<div class="col-9 text-left">
+									<input type="text" class="form-control" id="amount"
+										name="amount" placeholder="금액을 입력하세요"><br>
+										<button id="allBtn"	 type="button" class="btn btn-secondary btn-sm">전액</button>
+										<button id="10000" 	 type="button" class="btn btn-secondary btn-sm">1만</button>
+										<button id="50000" 	 type="button" class="btn btn-secondary btn-sm">5만</button>
+										<button id="100000"  type="button" class="btn btn-secondary btn-sm">10만</button>
+										<button id="1000000" type="button" class="btn btn-secondary btn-sm">100만</button>
+								</div>
+							</div>
+							<br>
+							<div class="row">
+								<div class="col-3 text-right">
+									<h6>계좌비밀번호</h6>
+								</div>
+								<div class="col-9 text-left">
+									<input type="password" class="form-control" id="acctPw" name="acctPw">
+								</div>
+							</div>
+							<br>
+						</div>
 
-					<br>
-					<button id="transferBtn" type="button"
-						class="btn btn-primary btn-lg">이체하기</button>
+						<!-- <div class="col-1 vl text-center "></div> -->
+						
+						<div class="col-6 text-center" style="padding: 50px;">
+							<h3 style="padding:10px;">STEP 2. 선택정보입력</h3>
+							<br>
+							
+							<div class="row">
+								<div class="col-3 text-right">
+									<h6>내 통장 표시</h6>
+								</div>
+								<div class="col-9 text-left">
+									<input type="text" class="form-control"
+											id="content" name="content" placeholder="14자 이내, 통장에는 6자까지 표시">
+								</div>
+							</div>
+							<br>
+							<div class="row">
+								<div class="col-3 text-right">
+									<h6>받는분 통장 표시</h6>
+								</div>
+								<div class="col-9 text-left">
+									<input type="text" class="form-control"
+									id="rcvContent" name="rcvContent" value="${loginVO.name}">
+									<!-- placeholder="10자 이내, 입력하지 않으면 예금주명" -->
+								</div>
+							</div>
+							<br>
+							<div class="row">
+								<div class="col-3 text-right">
+									<h6>받는분 예금주명</h6>
+								</div>
+								<div class="col-9 text-left">
+									<input type="text" class="form-control"
+										id="rcvName" name="rcvName" placeholder="착오송금 방지를 위한 입금계좌 예금주명">
+								</div>
+							</div>
+							<br>
+							
+						</div>
+						
+						<div class="padding-bottom-30 row"
+								style="max-width: 170px; margin: 0 auto;">
+								
+								<button id="confirmBtn" type="button"
+									class="btn btn-primary btn-lg"
+									data-toggle="modal" data-target="#confirm-modal"
+									style="margin: 14px; border-color: #019591; background-color: #019591; color: white; display: inline-block; text-align: center;"
+									>확인</button>
+						</div>
+
+					</div>
 				</div>
-				 -->			
+
 			</div>
 
-			<jsp:include page="/WEB-INF/jsp/include/footer.jsp" />
-
 		</div>
+
+		<!-- footer -->
+		<jsp:include page="/WEB-INF/jsp/include/footer.jsp"></jsp:include>
+
 	</div>
 
+	<!-- END -->
+	
+	<!-- START 모달 -->
+	
 	<div class="modal fade" id="balance-modal" tabindex="-1" role="dialog"
 		style="display: none;" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered" role="document">
 			<div class="modal-content">
 				<div class="modal-body text-center font-12">
-					<h4 class="padding-top-30 mb-30 weight-500">
+					<h3 class="padding-top-30 mb-30 weight-500">
 						💡 조회하신 계좌에 대한 잔액 정보입니다<br>
-					</h4>
+					</h3>
 					<table class="table table-bordered">
 						<thead>
 							<tr>
@@ -416,17 +507,17 @@
 
 						</tbody>
 					</table>
+					
+					<br>
 
 					<div class="padding-bottom-30 row"
 						style="max-width: 170px; margin: 0 auto">
 
 						<div class="col-12">
 							<button type="button"
-								class="btn btn-primary border-radius-100 btn-block confirmation-btn"
-								data-dismiss="modal">
-								<i class="fa fa-check"></i>
-							</button>
-							확인
+									class="btn btn-primary btn-block"
+									style="border-color: #019591; background-color: #019591;"
+									data-dismiss="modal">확인</button>
 						</div>
 
 					</div>
@@ -436,36 +527,37 @@
 	</div>
 
 
-
 	<div class="modal fade" id="confirm-modal" tabindex="-1" role="dialog"
 		style="display: none;" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered" role="document">
 			<div class="modal-content">
 				<div class="modal-body text-center font-12">
-					<h4 class="padding-top-30 mb-30 weight-500">
-						💡 ${calVO.opponentName}님께 ${calVO.amountFm}원 이체하시겠습니까?<br>
-					</h4>
-					
-					<p style="border: 1px; border-color: gray; text-align: left;">
-						<ul>
-							<li>고객님께서 입력하신 입금은행, 입금계좌번호, 이체금액 및 받는 분을 다시 한 번 확인하세요.</li>
-							<li>메신저 또는 문자로 송금을 요구받은 경우에는 반드시 사실관계 확인 후 이체하시기 바랍니다.</li>
-							<li>출금계좌가 이체수수료 면제횟수가 있는 상품일 경우, 잔여 면제횟수 내에서 면제됩니다.</li>
-							<li>2건 이상 이체할 경우 [이체추가] 버튼을 누르면 더욱 빠르게 이용할 수 있습니다. (10건까지 가능)</li>
-							<li>이체 도중 오류 발생 시, 반드시 출금계좌 거래내역을 확인하시기 바랍니다.</li>
+					<div>
+						<h3 class="padding-top-30 mb-30 weight-500">
+							<%-- 💡 ${calVO.opponentName}님께 ${calVO.amountFm}원 이체하시겠습니까?<br> --%>
+							💡 이체하기 전 입력하신 내용을 확인해주세요.
+						</h3>
+					</div>
+					<div>
+						<ul style="text-align: left; padding: 20px;">
+							<li style="list-style-type: disc;">고객님께서 입력하신 입금은행, 입금계좌번호, 이체금액 및 받는 분을 다시 한 번 확인하세요.</li>
+							<li style="list-style-type: disc;">메신저 또는 문자로 송금을 요구받은 경우에는 반드시 사실관계 확인 후 이체하시기 바랍니다.</li>
+							<li style="list-style-type: disc;">출금계좌가 이체수수료 면제횟수가 있는 상품일 경우, 잔여 면제횟수 내에서 면제됩니다.</li>
+							<li style="list-style-type: disc;">2건 이상 이체할 경우 [이체추가] 버튼을 누르면 더욱 빠르게 이용할 수 있습니다. (10건까지 가능)</li>
+							<li style="list-style-type: disc;">이체 도중 오류 발생 시, 반드시 출금계좌 거래내역을 확인하시기 바랍니다.</li>
 						</ul>
-					</p>
+					</div>
+					
+					
 					<!-- <form class="transaction-form" action="${pageContext.request.contextPath}/transfer/result" 
 							method="post" > -->
 						<table class="table table-bordered">
 							<thead>
 								<tr>
-									<th scope="col">No.</th>
-									<th scope="col">출금계좌번호</th>
-									<th scope="col">입금계좌번호</th>
-									<th scope="col">이체금액(원)</th>
-									<th scope="col">받는분 예금주명</th>
-									<th scope="col">결과</th>
+									<th scope="col" style="font-size: 12px;">출금계좌번호</th>
+									<th scope="col" style="font-size: 12px;">입금계좌번호</th>
+									<th scope="col" style="font-size: 12px;">이체금액(원)</th>
+									<th scope="col" style="font-size: 12px;">받는분 예금주명</th>
 								</tr>
 							</thead>
 							<tbody id="tbodyInfo">
@@ -475,23 +567,29 @@
 						<br>
 
 					<div class="padding-bottom-30 row"
-						style="max-width: 170px; margin: 0 auto;">
+						style="max-width: 200px; margin: 0 auto;">
 						<div class="col-6">
-							<button type="button"
+							<!-- <button type="button"
 								class="btn btn-secondary border-radius-100 btn-block confirmation-btn"
 								data-dismiss="modal">
-								<i class="fa fa-times"></i>
-							</button>
-							취소
+							</button> -->
+							
+							<button type="button"
+									class="btn btn-primary btn-block" 
+									style="border-color: #019591; background-color: #019591;"
+									data-dismiss="modal">취소</button>
 						</div>
 						<div class="col-6">
 							<!-- type="submit" -->
-							<button id="resultBtn" 
+							<!-- <button id="resultBtn" 
 								class="btn btn-primary border-radius-100 btn-block confirmation-btn"
 								data-dismiss="modal">
-								<i class="fa fa-check"></i>
-							</button>
-							확인
+								
+							</button> -->
+							<button type="button" id="resultBtn" 
+									class="btn btn-primary btn-block"
+									style="border-color: #019591; background-color: #019591;"
+									data-dismiss="modal">확인</button>
 						</div>
 					</div>
 						<!-- <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In"> -->
@@ -501,21 +599,47 @@
 			</div>
 		</div>
 	</div>
+	<!-- END -->
+	
 	
 	<!-- js -->
 		<script src="${pageContext.request.contextPath}/resources/vendors/scripts/core.js"></script>
 		<script src="${pageContext.request.contextPath}/resources/vendors/scripts/script.min.js"></script>
 		<script src="${pageContext.request.contextPath}/resources/vendors/scripts/process.js"></script>
 		<script src="${pageContext.request.contextPath}/resources/vendors/scripts/layout-settings.js"></script>
-		<!-- Google Tag Manager (noscript) -->
-		<noscript
-			><iframe
-				src="https://www.googletagmanager.com/ns.html?id=GTM-NXZMQSS"
-				height="0"
-				width="0"
-				style="display: none; visibility: hidden"
-			></iframe
-		></noscript>
-		<!-- End Google Tag Manager (noscript) -->
+	
+	<!-- js -->
+	<%-- <script
+		src="${pageContext.request.contextPath}/resources/src/plugins/fullcalendar/fullcalendar.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/vendors/scripts/calendar-setting.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/src/plugins/datatables/js/jquery.dataTables.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/src/plugins/datatables/js/dataTables.bootstrap4.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/src/plugins/datatables/js/dataTables.responsive.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/src/plugins/datatables/js/responsive.bootstrap4.min.js"></script>
+
+	<!-- buttons for Export datatable -->
+	<script
+		src="${pageContext.request.contextPath}/resources/src/plugins/datatables/js/dataTables.buttons.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/src/plugins/datatables/js/buttons.bootstrap4.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/src/plugins/datatables/js/buttons.print.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/src/plugins/datatables/js/buttons.html5.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/src/plugins/datatables/js/buttons.flash.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/src/plugins/datatables/js/pdfmake.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/src/plugins/datatables/js/vfs_fonts.js"></script>
+	<!-- Datatable Setting js -->
+	<script
+		src="${pageContext.request.contextPath}/resources/vendors/scripts/datatable-setting.js"></script> --%>
+	
 	</body>
 </html>

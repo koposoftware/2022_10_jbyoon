@@ -79,6 +79,34 @@
 	
 	<task:annotation-driven/>
 
+	<!-- Quartz 스케줄러 관련된 bean -->
+	<bean name="blogJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <!--  Job 역할을 수행할 클래스를 지정 -->
+        <property name="jobClass" value="kr.ac.kopo.message.controller.BlogJob"/>
+        
+        <!-- Job 역할을 수행항 클래스에게 전달할 파라미터를 정의합니다. setter 메소드를 통해 전달받습니다. -->
+        <property name="jobDataAsMap">
+            <map>
+                <entry key="blogService" value-ref="blobService"/>
+            </map>
+        </property>
+        <property name="durability" value="true"/>
+    </bean>
+	<!-- 작업을 수행할 조건을 정의하고 있는 Trigger 객체에 대한 설정 -->
+	<bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<!-- 수행시키는 jobDetail 객체를 지정 -->
+        <property name="jobDetail" ref="blogJob"/>
+        <!-- 작업을 수행할 조건 -->
+        <property name="cronExpression" value="0 0 0 * * ?"/>
+    </bean>
+    <!-- 스케줄러를 생성하는 SchedulerFactoryBean 객체에 대해 정의 (사용할 trigger들을 지정한다)-->
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="cronTrigger"/>
+            </list>
+        </property>
+    </bean>
 </beans>
 
 

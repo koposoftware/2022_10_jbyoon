@@ -9,6 +9,7 @@ public class HanaAccountVO {
 	Bank Account (계좌 테이블)
 	*/
 	private String acctNum;
+	private String acctNum_masked;
 	private String memberId;
 	private int bankCd;
 	private String alias;

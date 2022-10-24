@@ -22,5 +22,5 @@ public class MemberVO {
 	private String openChk;
 	private String payChk;
 	private String type;
-
+	private String profileImage;
 }

@@ -7,7 +7,7 @@ import kr.ac.kopo.acctbook.vo.CalendarVO;
 
 public interface AccountService {
 
-	List<HanaAccountVO> selectAll(String id);
+	List<HanaAccountVO> selectAcctList(String id);
 
 	void insertAcctInfo(HanaAccountVO vo);
 

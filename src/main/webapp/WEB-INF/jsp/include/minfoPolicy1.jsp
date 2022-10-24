@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
-<textarea class="form-control" readonly="readonly">
+<textarea class="form-control" readonly="readonly" style="height: 200px;">
 제1조(개인정보의 처리 목적)
 당행은 개인정보를 다음 각 호의 목적을 위해 처리합니다. 수집된 개인정보는 다음의 목적 외의 용도로는 사용되지 않으며
 이용 목적이 변경될 시에는 사전동의를 구할 예정입니다. 
