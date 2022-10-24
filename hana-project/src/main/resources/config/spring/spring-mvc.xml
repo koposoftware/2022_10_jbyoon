@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:task="http://www.springframework.org/schema/task"     
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans   
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context   
+    http://www.springframework.org/schema/context/spring-context.xsd
+    http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc.xsd
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx.xsd
+    http://www.springframework.org/schema/task
+    http://www.springframework.org/schema/task/spring-task.xsd">
+
+	<context:component-scan base-package="kr.ac.kopo" />
+  
+    <mvc:annotation-driven>
+    	<mvc:message-converters>  
+    		<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+    			<property name="supportedMediaTypes">
+    				<list>
+    					<value>text/html; charset=UTF-8</value>
+    				</list>
+    			</property>
+    		</bean>
+    		<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+    			<property name="supportedMediaTypes">
+    				<list>
+    					<value>text/html; charset=UTF-8</value>
+    					<value>application/json; charset=UTF-8</value>
+    				</list>
+    			</property>
+    		</bean>	
+    	</mvc:message-converters>
+    </mvc:annotation-driven>
+    
+    
+    
+	<mvc:default-servlet-handler />
+	<mvc:view-resolvers>
+		<mvc:jsp prefix="/WEB-INF/jsp/" suffix=".jsp" />
+	</mvc:view-resolvers>
+
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+		<property name="url" value="jdbc:oracle:thin:@localhost:1522:xe" />
+		<property name="username" value="hana"/>
+		<property name="password" value="1234"/>
+	</bean>
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="mapperLocations" value="classpath:config/sqlmapper/oracle/*.xml" />
+		<property name="configLocation" value="classpath:config/mybatis/mybatis-config.xml"></property>
+	</bean>
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="sqlSessionFactory"></constructor-arg>
+	</bean>
+	
+	<bean id="multipartResolver"
+        class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- max upload size in bytes : 20MB -->
+        <property name="maxUploadSize" value="20971520" />
+        <!-- max size of file in memory : 1MB -->
+        <property name="maxInMemorySize" value="1048576" />
+    </bean>
+
+	
+	<!-- 트랜잭션 처리 -->
+	<bean  id="transactionManager" 
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	
+	<task:annotation-driven/>
+
+	<!-- Quartz 스케줄러 관련된 bean -->
+	<bean name="blogJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <!--  Job 역할을 수행할 클래스를 지정 -->
+        <property name="jobClass" value="kr.ac.kopo.message.controller.BlogJob"/>
+        
+        <!-- Job 역할을 수행항 클래스에게 전달할 파라미터를 정의합니다. setter 메소드를 통해 전달받습니다. -->
+        <property name="jobDataAsMap">
+            <map>
+                <entry key="blogService" value-ref="blobService"/>
+            </map>
+        </property>
+        <property name="durability" value="true"/>
+    </bean>
+	<!-- 작업을 수행할 조건을 정의하고 있는 Trigger 객체에 대한 설정 -->
+	<bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<!-- 수행시키는 jobDetail 객체를 지정 -->
+        <property name="jobDetail" ref="blogJob"/>
+        <!-- 작업을 수행할 조건 -->
+        <property name="cronExpression" value="0 0 0 * * ?"/>
+    </bean>
+    <!-- 스케줄러를 생성하는 SchedulerFactoryBean 객체에 대해 정의 (사용할 trigger들을 지정한다)-->
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="cronTrigger"/>
+            </list>
+        </property>
+    </bean>
+</beans>
+
+
+
+
+
+
+
+
+

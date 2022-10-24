@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+ 
+<mapper namespace="board.dao.boardDAO">
+	<resultMap type="kr.ac.kopo.board.vo.BoardVO" id="boardMap">
+		<result column="NO" property="no"/>
+		<result column="ACCT_CD" property="acctCd"/>
+		<result column="ACCT_TYPE_CD" property="acctTypeCd"/>
+		<result column="ID" property="id"/>
+		<result column="WRITER" property="writer"/>
+		<result column="REG_DATE" property="regDate"/>
+		<result column="VIEW_CNT" property="viewCnt"/>
+		<result column="TITLE" property="title"/>
+		<result column="CONTENT" property="content"/>
+		<result column="REPLY_CNT" property="replyCnt"/>
+	</resultMap>
+	
+	<!-- 댓글 카운트 증가 -->
+	<update id="increaseReplyCount" parameterType="String">
+		UPDATE BOARD
+		   SET REPLY_CNT = REPLY_CNT + 1
+		 WHERE NO = #{no}
+	</update>
+	
+	<update id="decreaseReplyCount" parameterType="String">
+		UPDATE BOARD
+		   SET REPLY_CNT = REPLY_CNT - 1
+		 WHERE NO = #{no}
+	</update>
+	
+	<select id="selectAll" resultMap="boardMap">
+    	SELECT NO, ACCT_CD, ACCT_TYPE_CD, ID, WRITER
+    			, REG_DATE, VIEW_CNT, TITLE, CONTENT, REPLY_CNT
+     	  FROM BOARD
+     	 ORDER BY NO DESC 
+  	</select>
+  	
+  	<select id="selectByNo" parameterType="String" resultMap="boardMap"  >
+ 	 	SELECT NO, ACCT_CD, ACCT_TYPE_CD, ID, WRITER
+    			, REG_DATE, VIEW_CNT, TITLE, CONTENT, REPLY_CNT
+ 	 	  FROM BOARD
+ 	 	 WHERE NO = #{no}
+  	</select>
+  
+	<insert id="insert" parameterType="boardVO">
+  		INSERT INTO BOARD(NO, ACCT_CD, ID, WRITER, TITLE, CONTENT)
+		VALUES (LPAD(SEQ_BOARD_NO.NEXTVAL, 4, '0')
+	    	    , #{acctCd}
+	        	, #{id}
+	        	, #{writer}
+	        	, #{title}
+	        	, #{content})
+	</insert>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

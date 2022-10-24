@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reply.dao.replyDAO">
+	<resultMap type="kr.ac.kopo.reply.vo.ReplyVO" id="replyMap">
+		<result column="no" property="no"/>
+		<result column="board_no" property="boardNo"/>
+		<result column="content" property="content"/>
+		<result column="writer" property="writer"/>
+		<result column="reg_date" property="regDate"/>
+	</resultMap>
+	
+	<select id="selectAll" parameterType="int" resultMap="replyMap">
+		select * 
+		from t_reply
+		where board_no=#{boardNo}
+		order by no desc
+	</select>	 
+	<insert id="insert" parameterType="kr.ac.kopo.reply.vo.ReplyVO">
+		insert into t_reply (no, board_no, content, writer)
+		values (seq_t_reply_no.nextval, #{boardNo}, #{content}, #{writer} )
+	</insert>
+	<delete id="delete" parameterType="int">
+		delete from t_reply
+		where no=#{no}
+	</delete>
+
+ 
+</mapper>
+
+
+
