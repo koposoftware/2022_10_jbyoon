@@ -1,106 +1,101 @@
 # 2022_10_jbyun
 
-# 모두하나 - K-Contents 소액투자 플랫폼
+# 간편결제 서비스에 특화된 자산관리 챌린지 플랫폼
 
-[프로젝트 홈페이지](https://koposoftware.github.io/2022_8_ykseo/)
+[프로젝트 홈페이지](https://koposoftware.github.io/2022_10_jbyun/)
 
-# 1. 프로젝트 개요
+# 1. 프로젝트 개요 및 목적
 <img src="summary.png" style="width:100%"/>
 
-## 1-1. 프로젝트 배경
-- 상대적으로 위험부담이 적은 소액투자의 인기가 증가함에 따라 크라우드 펀딩 시장이 성장하고 있습니다. 세계은행(WB)에 따르면 전세계 크라우드펀딩 시장규모는 2015년 40조원에서 2020년 100조원대까지 확대된 것으로 나타났습니다. [출처 : 2022.06.12. 이뉴스투데이]
-- 한국 콘텐츠 10개 분야가 차지하는 비중이 전년보다 5.9%포인트 증가(평균 27.4%)되며, 해외 시장에서의 한국문화컨텐츠의 비중이 확대되고 있습니다. [출처 : 2022.02.14. 연합뉴스]
+<h3>[ 개요 (문제점) ]</h3>
+-	기존 가계부 앱은 계좌, 카드에 대한 거래내역은 기록해주지만, 간편결제 내역은 항상 빠져 있으므로 사용자가 가계부에 수동 입력해야 하는 불편함 존재
+-	계좌로부터 하나머니(원큐페이) 충전 금액이 자동 이체되는 금액은 가계부에 기록이 남지만, 하나머니로 상품 구매 시 실제 결제 금액은 가계부에 찍히지 않음
+-	매년 간편결제 이용자 수가 증가하는 추세이므로 간편결제에 대한 거래내역을 빈틈없이 관리해주고, 새어 나가는 지출을 줄일 수 있게 도와주는 시스템 필요
+<h3>[ 목적 (해결책) ]</h3>
+-	계좌 이체, 카드 결제, 간편결제에 대한 거래내역을 전부 자동으로 기록해주는 가계부 필요 (하나의 가계부에서 모두 관리)
+-	간편결제 거래내역 데이터를 제공해주는 원큐페이 간편결제 시스템 구축
+-	예산 챌린지로 불필요한 지출을 줄이며 가계부에서 지출 현황을 한 눈에 파악
 
-## 1-2. 프로젝트 개요 및 목적
-- 모두하나는 K-Contents를 주력 상품으로 투자자와 크리에이터를 연결하는 크라우드 펀딩 플랫폼입니다.
-- 투자를 받기 원하는 크리에이터가 투자 상품을 업로드하면, 투자자는 마음에 드는 투자 상품에 투자할 수 있습니다. 프로젝트가 종료되어 수익금이 반환되면 수익금을 정산하는 서비스를 제공합니다.
-- 모두하나는 하나은행과 연계되어 계좌 개설 및 이체 등 은행 서비스 이용이 가능합니다.
-- 프로젝트를 확장하여 해외 투자자를 유치하는 것이 목표입니다. 
+# 2. 프로젝트 결과
 
-# 2. 프로젝트 제안서
-[제안서<img src="발표자료-001.png"/>](/2260341011_서유경_제안서.pdf)<br>
+## 2-1. 핵심기능 5가지
+<img src="five-skills.png" style="width:100%"/><br>
+핵심기능은 크게 5가지로 이루어져 있습니다.
 
+1.	가계부 자동 기록 : 계좌이체, 체크카드, 간편결제 (원큐페이, 카카오페이) 내역을 모두 자동으로 기록
+2.	간편결제 (원큐페이) : 하나은행과 제휴를 맺은 가맹점에서 결제 시스템을 통해 원큐페이 간편결제를 진행 
+3.	계좌 관리 : 계좌 이체, 계좌 목록 조회, 계좌 별 잔액 조회
+4.	예산 챌린지 : 매달 목표 예산 금액을 설정하고 지출 현황을 알려주기 위해 카카오 메시지 전송
+5.	소비패턴 비교 및 분석 : 사용자의 월별/주별 지출 현황, 많이 사용하는 결제 방법, 사용자와 비슷한 연령대인 다른 고객들의 평균 소비패턴을 비교 분석
 
-# 3. 프로젝트 결과
+## 2-2. 서비스 아키텍처
+<img src="service-architecture.png" style="width:100%"/><br>
+- 원큐페이 연동, 결제 요청, 결제 승인에 대한 Open API 문서는 아래에서 참고해주십시오.
+- 사용자가 하나은행 시스템에서 이와 같은 계좌 관리 활동들을 할 수 있고, 3가지 거래내역을 가계부에 기록하여 소비패턴을 분석합니다.
+- 예산 챌린지로 사용자의 지출 관리를 도와줍니다.
+- 엄재철 교육생의 H.S. With 플랫폼 (주문 시스템)과 저의 원큐페이 시스템이 연동되어 있어서 원큐페이 간편결제 서비스를 제공합니다.
 
-## 3-1. 모두하나 투자 프로세스
-<img src="fund_process.png" style="width:100%"/><br>
-모두하나의 투자 프로세스 입니다.
-다음과 같이 크게 5가지의 과정을 통해 하나의 프로젝트가 완성됩니다.
-
-1. 투자를 받고 싶어하는 크리에이터가 프로젝트를 신청합니다.
-2. 관리자는 프로젝트 내용을 심사하고 승인합니다.
-3. 승인된 프로젝트는 투자자를 모집합니다.
-4. 모집이 성공하면 투자금으로 프로젝트를 진행을 합니다.
-5. 그에 따른 수익금을 반환하면, 관리자가 투자금을 정산합니다.
-
-## 3-2. 서비스 아키텍처
-<img src="service_architecture.png" style="width:100%"/><br>
-- 하나은행과 Open API로 연계되어 운영됩니다.
-- 사용자 역할 별 서비스가 구분됩니다.
-- 투자자는 예치금 계좌의 생성과 조회, 이체 서비스를 사용할 수 있습니다.
-- 투자자는 프로젝트(투자상품)에 투자할 수 있습니다.
-- 투자자는 투자 내역 및 현황을 포함한 회원정보를 확인할 수 있습니다.
-- 크리에이터는 투자받고 싶은 프로젝트를 신창할 수 있습니다.
-- 관리자는 프로젝트를 관리할 수 있으며, 수익금을 정산할 수 있습니다.
+## 2-3. 시스템 아키텍처
+<img src="system-architecture.png" style="width:100%"/><br>
+- 프론트 : Bootstrap, HTML, CSS, JS
+- 백엔드 : Java로 스프링 MVC 구조를 만들고 mybatis, 톰캣 서버, 오라클 DB를 사용
 
 
-## 3-3. 하나은행 OPEN API 문서
-[문서링크 - https://summer-run-769.notion.site/HanaBank-2b896d4edcd641c584db929fc8341848 <img src="api_doc.png"/>](https://summer-run-769.notion.site/HanaBank-2b896d4edcd641c584db929fc8341848)
+## 2-4. 원큐페이 OPEN API 문서
+[문서링크 <img src="api-doc-titlepage.png"/>](/open-api-document.pdf)<br>
 
-## 3-4. 발표자료
-[발표자료<img src="발표자료-001.png"/>](/2260341011_서유경_발표자료.pdf)<br>
+## 2-5. 발표자료
+[발표자료 <img src="title.png"/>](/2260341014_윤정빈_발표.pdf)<br>
 
-## 3-5. 시연 동영상 
+## 2-6. 시연 동영상 
 <iframe width="828" height="480" src="https://www.youtube.com/embed/kIhcEC27FOY" title="한국폴리텍대학 광명융합기술교육원 2260341011 서유경 - 최종 프로젝트 시연영상" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
 
 
 
 # 4. 프로젝트 상세
 
 ## 4-1. 사용기술
-- OpenAPI 서버 제작 및 사용
-- PL/SQL package 작성, Exception Log 기록
-- Spring Framework 사용
-- Spring Scheduler를 사용하여 프로젝트 변동사항 관리
-- MyBatis롤 이용한 DBMS와 Application 통신
-- Bootstrap을 이용한 웹 디자인
-- 카카오, 네이버 API 사용
-- CoolSMS 메시지 전송
-- Java Mail Sender 사용
+1.	Library
+-	Full Calendar : 매달 지출, 수입 금액을 시각적으로 관리
+-	QR Code Scanner : 원큐페이 결제 시 QR코드 스캔
+-	junit (4.13.2) : 개발 시간 단축을 위해 테스트 코드 작성
+-	Lombok (1.18.24) : 코드 길이 단축 및 오류 줄이기 위해 getter, setter, toString 자바 코드를 생성해주는 어노테이션 제공
+-	Quartz Scheduler : 매일 03시에 챌린지 마감까지 남은 일수를 update
+-	Faker : 다량의 의미 있는 더미 데이터 생성
+-	Chart.js, AppexChart.js : 거래내역 기반 지출 분석 결과를 시각화
+<br>
+2.	자체개발 API
+-	원큐페이 제휴 (연동) : 가맹점에게 간편결제 기능을 제공하기 위해 원큐페이와 제휴 요청
+-	결제 요청 : 결제 방법으로 원큐페이 사용 시, QR 코드를 스캔하여 결제를 요청
+-	결제 승인 : 결제가 성공적으로 완료되면 승인 결과(결제 내역)를 JSON 형태로 넘김
+<br>
+3.	Open API
+-	카카오 로그인 : 홈페이지 로그인 시 호출
+-	카카오 메시지 : 예산 챌린지 수행 중 지출 현황 알림, 매달 마지막날 챌린지 결과 알림
+-	카카오페이 단건결제 : 가맹점에서 결제할 때 카카오페이 간편결제 방법 사용
+
 
 ## 4-2. 개발환경
-- OS : Window10, Linux Ubuntu 22.04
-- JDK : java 1.8
-- Language : Java, jsp, html, css, javascript, SQL, PL/SQL
-- IDE : Eclipse, Sql Developer
-- Framework : Spring, Mybatis
-- Server : Tomcat9, Oracle 19c
-- SVN : Git
+1.	OS : Windows 11
+2.	Server : Apache2, Tomcat9
+3.	IDE/Tool : Eclipse, DA# Modeler5, SQL Developer, Postman, Maven
+4.	Framework : Spring v2.7.3 (Spring MVC 기반 웹애플리케이션 개발), MyBatis v3.5.10, Bootstrap 4
 
 ## 4-3. ERD
 <img src="erd.png" style="width:100%"/><br>
 
-## 4-4. 프로젝트 아키텍처
-<img src="project_architecture.png" style="width:100%"/><br>
-- 2개의 DB Server는 Oracle 클라우드에 Oracle RDBMS 19c를 설치하여 구축하였습니다.
-- 하나은행 API는 AWS 클라우드에 Apache2 WS, Tomcat9 WAS를 구축하여 deploy하였습니다.
-
-## 4-5. 프로젝트 일정
-2022.09.16 ~ 2022.10.24
-<img src="gantt_chart.png" style="width:100%"/><br>
+## 4-4. 프로젝트 일정
+2022.09.16 ~ 2022.10.25
+<img src="chart.png" style="width:100%"/><br>
 
 
 # 5. 본인 소개
 
-|이름      |서유경    |<img src="ykseo.jpg" style="width:25%"/>|
-|연락처     |이메일    |syk322(@)naver.com|
-|skill set|Language|Java, Python, C, JavaScript, HTML, SQL, PL/SQL|
+|이름      |윤정빈    |<img src="jbyun_profile.jpg" style="width:25%"/>|
+|연락처     |이메일    |binifia(@)gmail.com|
+|skill set|Language|Java, JSP, HTML, CSS, Javascript/jQuery, C#, PL/SQL|
 |         |TOOLS   |Spring, Mybatis|
-|         |Database|Oracle, MySQL|
-|         |Etc     |Git, Oracle Cloud, AWS, Cuda|
-|자격증     |2019년   |SQLD|
-|         |2022년   |정보처리기사|
-|수상      |2022년   |교내 프로젝트작품 경진대회 은상 (광명융합기술교육원) |
-|         |2022년   |한국폴리텍대학 벤처창업아이템경진대회 입선 (고용노동부 후원)  |
+|         |Database|Oracle, MSSQL|
+|         |Etc     |Git, Oracle Cloud|
+|자격증     |2021년   |SQLD|
+|수상      |2020년   |한이음 ICT 공모전 / 보안 우회 시도를 차단할 수 있는 새로운 안면 인식 인증 방법 입선 |
