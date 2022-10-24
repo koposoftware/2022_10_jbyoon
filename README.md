@@ -91,7 +91,7 @@
 
 # 5. 본인 소개
 
-|이름      |윤정빈    |<img src="jbyun_profile.jpg" style="width:25%"/>|
+|이름      |윤정빈    ||
 |연락처     |이메일    |binifia(@)gmail.com|
 |skill set|Language|Java, JSP, HTML, CSS, Javascript/jQuery, C#, PL/SQL|
 |         |TOOLS   |Spring, Mybatis|
