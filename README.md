@@ -1,6 +1,6 @@
 # 간편결제 서비스에 특화된 자산관리 챌린지 플랫폼
 
-[프로젝트 홈페이지](https://koposoftware.github.io/2022_10_jbyun/)
+[프로젝트 홈페이지](https://koposoftware.github.io/2022_10_jbyoon/)
 
 # 1. 프로젝트 개요 및 목적
 <img src="summary.png" style="width:100%"/>
