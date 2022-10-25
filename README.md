@@ -1,5 +1,3 @@
-# 2022_10_jbyun
-
 # 간편결제 서비스에 특화된 자산관리 챌린지 플랫폼
 
 [프로젝트 홈페이지](https://koposoftware.github.io/2022_10_jbyun/)
